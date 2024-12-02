@@ -1,0 +1,154 @@
+services:
+  db:
+    restart: always
+    container_name: coursemaker-mysql
+    image: mysql:8.0.37
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: coursemaker
+      MYSQL_SSL_CA: ""
+      MYSQL_SSL_CERT: ""
+      MYSQL_SSL_KEY: ""
+      TZ: "Asia/Seoul"
+    ports:
+      - 9999:3306
+    networks:
+      - db-network
+    profiles: ["database", "required"]
+
+  mongo:
+    image: mongo:4.4.9
+    container_name: coursemaker-mongo
+    ports:
+      - 8888:21017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=coursemaker
+      - MONGO_INITDB_ROOT_PASSWORD=coursemaker
+      - MONGO_INITDB_DATABASE=coursemaker
+    profiles: [ "database", "required" ]
+    networks:
+      - db-network
+    command: [ "mongod", "--port", "21017" ]
+
+  redis:
+    container_name: coursemaker-redis
+    image: redis:6.2.6-alpine
+    ports:
+      - 7777:6379
+    networks:
+      - db-network
+      - cache-network
+    restart: always
+    profiles: ["cache", "required"]
+
+
+  server:
+    image: coursemaker/course-maker-api
+    volumes:
+      - ./be_logs:/logs
+    depends_on:
+      - db
+    profiles: ["server"]
+    ports:
+      - "8080:8080"
+    networks:
+      - db-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+
+  prometheus:
+    image: prom/prometheus:v2.37.6
+    container_name: coursemaker-prometheus
+    volumes:
+      - coursemaker-prometheus-data:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    restart: always
+    ports:
+      - "9090:9090"
+    networks:
+      - metric-network
+    profiles:
+      - metric
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: coursemaker-grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    ports:
+      - "3000:3000"
+    volumes:
+      - coursemaker-grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    networks:
+      - metric-network
+    profiles:
+      - metric
+
+  # Elastic search 설정
+  elasticsearch:
+    container_name: coursemaker-elasticsearch
+    image: elasticsearch:7.17.16
+    ports:
+      - 9200:9200
+      - 9300:9300
+    volumes:
+      - ./elasticsearch:/usr/share/elasticsearch/data
+    # Elastic search 계정정보
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: true
+      xpack.security.transport.ssl.enabled: true
+      ELASTIC_USERNAME: "coursemaker"
+      ELASTIC_PASSWORD: "coursemaker1!"
+      network.host : 0.0.0.0
+    networks:
+      - elk-network
+    profiles:
+      - elk
+
+  # Logstash 설정
+  logstash:
+    container_name: coursemaker-logstash
+    image: docker.elastic.co/logstash/logstash:7.17.16
+    ports:
+      - 5000:5000
+      - 9600:9600
+    volumes:
+      - ./logstash/pipeline/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk-network
+    profiles:
+      - elk
+
+  # Kibana 설정
+  kibana:
+    container_name: coursemaker-kibana
+    image: kibana:7.17.16
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+    volumes:
+      - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml
+    networks:
+      - elk-network
+    profiles:
+      - elk
+
+
+
+networks:
+  db-network:
+  cache-network:
+  elk-network:
+  metric-network:
+    driver: bridge
+
+volumes:
+  coursemaker-grafana-data:
+  coursemaker-prometheus-data:
