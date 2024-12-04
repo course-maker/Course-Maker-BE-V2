@@ -1,4 +1,4 @@
 @echo off
 
 docker compose --profile required down
-docker compose --env-file .env --profile required up -d
+docker compose --profile required up -d
