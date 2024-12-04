@@ -10,7 +10,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import lombok.RequiredArgsConstructor;
 
-@Profile("local | dev")
+@Profile({"local", "dev"})
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -21,8 +21,7 @@ public class SecurityConfigDev {
 		http
 			.authorizeHttpRequests(auth ->
 				auth
-					.anyRequest().permitAll()
-			);
+					.anyRequest().permitAll());
 
 		http
 			.csrf(AbstractHttpConfigurer::disable)
