@@ -1,7 +1,11 @@
 package net.coursemaker.backendv2.common;
 
+import org.springframework.http.HttpStatus;
+
 public interface ErrorCode {
 	String getCode();
 
-	String getDescription();
+	HttpStatus getHttpStatus();
+
+	String getReasonPhrase();
 }
