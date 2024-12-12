@@ -127,7 +127,7 @@ class MemberDomainServiceTest {
 			"010-1234-1234",
 			true
 		);
-		when(commandRepository.findByNickname(anyString())).thenReturn(Optional.of(existMember));
+		when(commandRepository.findByNicknameAndDeletedAtIsNull(anyString())).thenReturn(Optional.of(existMember));
 
 		MemberSignupInfo signupInfo = new MemberSignupInfo();
 		signupInfo.setEmail("email1@email.com");
@@ -156,7 +156,7 @@ class MemberDomainServiceTest {
 			"010-1234-5555",
 			true
 		);
-		when(commandRepository.findByEmail(anyString())).thenReturn(Optional.of(existMember));
+		when(commandRepository.findByEmailAndDeletedAtIsNull(anyString())).thenReturn(Optional.of(existMember));
 
 		MemberSignupInfo signupInfo = new MemberSignupInfo();
 		signupInfo.setEmail("email@email.com");
@@ -185,7 +185,7 @@ class MemberDomainServiceTest {
 			"010-1234-1234",
 			true
 		);
-		when(commandRepository.findByPhoneNumber(anyString())).thenReturn(Optional.of(existMember));
+		when(commandRepository.findByPhoneNumberAndDeletedAtIsNull(anyString())).thenReturn(Optional.of(existMember));
 
 		MemberSignupInfo signupInfo = new MemberSignupInfo();
 		signupInfo.setEmail("email@email.com");
