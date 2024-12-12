@@ -4,7 +4,7 @@ import net.coursemaker.backendv2.common.exception.DataFormatMisMatchException;
 import net.coursemaker.backendv2.member.command.domain.repository.MemberCommandRepository;
 import net.coursemaker.backendv2.member.command.domain.aggregate.Member;
 import net.coursemaker.backendv2.member.command.domain.aggregate.SignUpType;
-import net.coursemaker.backendv2.member.command.domain.dto.MemberSignupInfo;
+import net.coursemaker.backendv2.member.command.domain.dto.MemberBasicSignUpInfo;
 import net.coursemaker.backendv2.member.command.domain.exception.DuplicatedEmailException;
 import net.coursemaker.backendv2.member.command.domain.exception.DuplicatedNicknameException;
 import net.coursemaker.backendv2.member.command.domain.exception.DuplicatedPhoneException;
@@ -23,36 +23,35 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.never;
 
-class MemberDomainServiceTest {
+class MemberSignUpServiceTest {
 
 	@Mock
 	private MemberCommandRepository commandRepository;
 
 	private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-	private MemberDomainService memberSignupService;
+	private MemberSignUpService memberSignupService;
 
 
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		memberSignupService = new MemberDomainService(commandRepository, passwordEncoder);
+		memberSignupService = new MemberSignUpService(commandRepository, passwordEncoder);
 	}
 
 	@Test
 	@DisplayName("정상 회원가입")
 	void 정상_회원가입() {
 		// Given
-		MemberSignupInfo signupInfo = new MemberSignupInfo();
+		MemberBasicSignUpInfo signupInfo = new MemberBasicSignUpInfo();
 		signupInfo.setEmail("email@email.com");
 		signupInfo.setPassword("password1!");
 		signupInfo.setNickname("닉네임");
-		signupInfo.setSignUpType(SignUpType.EMAIL);
 		signupInfo.setPhone("010-1234-1234");
 		signupInfo.setMarketingAgree(true);
 
 		// When
-		assertDoesNotThrow(() -> memberSignupService.signup(signupInfo));
+		assertDoesNotThrow(() -> memberSignupService.basicSignUp(signupInfo));
 
 		// Then
 		verify(commandRepository, times(1)).save(any(Member.class));
@@ -62,16 +61,15 @@ class MemberDomainServiceTest {
 	@DisplayName("잘못된 이메일 형식")
 	void 이메일_잘못됨() {
 		// Given
-		MemberSignupInfo signupInfo = new MemberSignupInfo();
+		MemberBasicSignUpInfo signupInfo = new MemberBasicSignUpInfo();
 		signupInfo.setEmail("wrongEmail");
 		signupInfo.setPassword("password1!");
 		signupInfo.setNickname("닉네임");
-		signupInfo.setSignUpType(SignUpType.EMAIL);
 		signupInfo.setPhone("010-1234-1234");
 		signupInfo.setMarketingAgree(true);
 
 		// When
-		assertThrows(DataFormatMisMatchException.class, () -> memberSignupService.signup(signupInfo));
+		assertThrows(DataFormatMisMatchException.class, () -> memberSignupService.basicSignUp(signupInfo));
 
 		// Then
 		verify(commandRepository, never()).save(any(Member.class));
@@ -81,16 +79,15 @@ class MemberDomainServiceTest {
 	@DisplayName("잘못된 전화번호 형식")
 	void 전화번호_잘못됨() {
 		// Given
-		MemberSignupInfo signupInfo = new MemberSignupInfo();
+		MemberBasicSignUpInfo signupInfo = new MemberBasicSignUpInfo();
 		signupInfo.setEmail("email@email.com");
 		signupInfo.setPassword("password1!");
 		signupInfo.setNickname("닉네임");
-		signupInfo.setSignUpType(SignUpType.EMAIL);
 		signupInfo.setPhone("010-12-1234");
 		signupInfo.setMarketingAgree(true);
 
 		// When
-		assertThrows(DataFormatMisMatchException.class, () -> memberSignupService.signup(signupInfo));
+		assertThrows(DataFormatMisMatchException.class, () -> memberSignupService.basicSignUp(signupInfo));
 
 		// Then
 		verify(commandRepository, never()).save(any(Member.class));
@@ -100,16 +97,15 @@ class MemberDomainServiceTest {
 	@DisplayName("잘못된 비밀번호 형식")
 	void 비밀번호_잘못됨() {
 		// Given
-		MemberSignupInfo signupInfo = new MemberSignupInfo();
+		MemberBasicSignUpInfo signupInfo = new MemberBasicSignUpInfo();
 		signupInfo.setEmail("email@email.com");
 		signupInfo.setPassword("password1");
 		signupInfo.setNickname("닉네임");
-		signupInfo.setSignUpType(SignUpType.EMAIL);
 		signupInfo.setPhone("010-1234-1234");
 		signupInfo.setMarketingAgree(true);
 
 		// When
-		assertThrows(DataFormatMisMatchException.class, () -> memberSignupService.signup(signupInfo));
+		assertThrows(DataFormatMisMatchException.class, () -> memberSignupService.basicSignUp(signupInfo));
 
 		// Then
 		verify(commandRepository, never()).save(any(Member.class));
@@ -129,16 +125,15 @@ class MemberDomainServiceTest {
 		);
 		when(commandRepository.findByNicknameAndDeletedAtIsNull(anyString())).thenReturn(Optional.of(existMember));
 
-		MemberSignupInfo signupInfo = new MemberSignupInfo();
+		MemberBasicSignUpInfo signupInfo = new MemberBasicSignUpInfo();
 		signupInfo.setEmail("email1@email.com");
 		signupInfo.setPassword("password1!");
 		signupInfo.setNickname("닉네임");
-		signupInfo.setSignUpType(SignUpType.EMAIL);
 		signupInfo.setPhone("010-1234-5678");
 		signupInfo.setMarketingAgree(true);
 
 		// When
-		assertThrows(DuplicatedNicknameException.class, () -> memberSignupService.signup(signupInfo));
+		assertThrows(DuplicatedNicknameException.class, () -> memberSignupService.basicSignUp(signupInfo));
 
 		// Then
 		verify(commandRepository, never()).save(any(Member.class));
@@ -158,16 +153,15 @@ class MemberDomainServiceTest {
 		);
 		when(commandRepository.findByEmailAndDeletedAtIsNull(anyString())).thenReturn(Optional.of(existMember));
 
-		MemberSignupInfo signupInfo = new MemberSignupInfo();
+		MemberBasicSignUpInfo signupInfo = new MemberBasicSignUpInfo();
 		signupInfo.setEmail("email@email.com");
 		signupInfo.setPassword("password1!");
 		signupInfo.setNickname("닉네임");
-		signupInfo.setSignUpType(SignUpType.EMAIL);
 		signupInfo.setPhone("010-1234-1234");
 		signupInfo.setMarketingAgree(true);
 
 		// When
-		assertThrows(DuplicatedEmailException.class, () -> memberSignupService.signup(signupInfo));
+		assertThrows(DuplicatedEmailException.class, () -> memberSignupService.basicSignUp(signupInfo));
 
 		// Then
 		verify(commandRepository, never()).save(any(Member.class));
@@ -187,16 +181,15 @@ class MemberDomainServiceTest {
 		);
 		when(commandRepository.findByPhoneNumberAndDeletedAtIsNull(anyString())).thenReturn(Optional.of(existMember));
 
-		MemberSignupInfo signupInfo = new MemberSignupInfo();
+		MemberBasicSignUpInfo signupInfo = new MemberBasicSignUpInfo();
 		signupInfo.setEmail("email@email.com");
 		signupInfo.setPassword("password1!");
 		signupInfo.setNickname("닉네임");
-		signupInfo.setSignUpType(SignUpType.EMAIL);
 		signupInfo.setPhone("010-1234-1234");
 		signupInfo.setMarketingAgree(true);
 
 		// When
-		assertThrows(DuplicatedPhoneException.class, () -> memberSignupService.signup(signupInfo));
+		assertThrows(DuplicatedPhoneException.class, () -> memberSignupService.basicSignUp(signupInfo));
 
 		// Then
 		verify(commandRepository, never()).save(any(Member.class));
