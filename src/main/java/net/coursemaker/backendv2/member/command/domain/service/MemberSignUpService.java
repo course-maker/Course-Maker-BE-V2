@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import net.coursemaker.backendv2.common.exception.DataFormatMisMatchException;
 import net.coursemaker.backendv2.member.command.domain.aggregate.Member;
 import net.coursemaker.backendv2.member.command.domain.aggregate.SignUpType;
-import net.coursemaker.backendv2.member.command.domain.dto.MemberSignupInfo;
+import net.coursemaker.backendv2.member.command.domain.dto.MemberBasicSignUpInfo;
 import net.coursemaker.backendv2.member.command.domain.exception.DuplicatedEmailException;
 import net.coursemaker.backendv2.member.command.domain.exception.DuplicatedNicknameException;
 import net.coursemaker.backendv2.member.command.domain.exception.DuplicatedPhoneException;
@@ -17,12 +17,12 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class MemberDomainService {
+public class MemberSignUpService {
 
 	private final MemberCommandRepository commandRepository;
 	private final PasswordEncoder passwordEncoder;
 
-	public void signup(MemberSignupInfo signupInfo) {
+	public void basicSignUp(MemberBasicSignUpInfo signupInfo) {
 		validateEmail(signupInfo.getEmail());
 		validatePhoneNumber(signupInfo.getPhone());
 		validateNickname(signupInfo.getNickname());
@@ -36,10 +36,6 @@ public class MemberDomainService {
 			signupInfo.getPhone(),
 			signupInfo.isMarketingAgree()
 		);
-
-		if (signupInfo.getSignUpType() == SignUpType.KAKAO) {
-			member.kakaoSignUp();
-		}
 
 		commandRepository.save(member);
 	}
