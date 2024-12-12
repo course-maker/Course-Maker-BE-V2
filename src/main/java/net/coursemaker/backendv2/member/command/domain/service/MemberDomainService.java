@@ -52,7 +52,7 @@ public class MemberDomainService {
 		}
 
 		/*이메일 중복 검증*/
-		commandRepository.findByEmail(email).ifPresent(member -> {
+		commandRepository.findByEmailAndDeletedAtIsNull(email).ifPresent(member -> {
 			/*탈퇴한 회원이 아닌 경우*/
 			if (member.getDeletedAt() == null) {
 				throw new DuplicatedEmailException("이미 가입된 이메일 입니다.", "이메일 중복: " + email);
@@ -68,7 +68,7 @@ public class MemberDomainService {
 		}
 
 		/*전화번호 중복 검증*/
-		commandRepository.findByPhoneNumber(phoneNumber).ifPresent(member -> {
+		commandRepository.findByPhoneNumberAndDeletedAtIsNull(phoneNumber).ifPresent(member -> {
 			/*탈퇴한 회원이 아닌 경우*/
 			if (member.getDeletedAt() == null) {
 				throw new DuplicatedPhoneException("이미 가입된 전화번호 입니다.", "전화번호 중복: " + phoneNumber);
@@ -84,7 +84,7 @@ public class MemberDomainService {
 		}
 
 		/*닉네임 중복 검증*/
-		commandRepository.findByNickname(nickname).ifPresent(member -> {
+		commandRepository.findByNicknameAndDeletedAtIsNull(nickname).ifPresent(member -> {
 			/*탈퇴한 회원이 아닌 경우*/
 			if (member.getDeletedAt() == null) {
 				throw new DuplicatedNicknameException("이미 존재하는 닉네임 입니다.", "닉네임 중복: " + nickname);

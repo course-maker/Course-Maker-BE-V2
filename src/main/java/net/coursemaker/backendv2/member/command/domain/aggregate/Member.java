@@ -26,6 +26,7 @@ public class Member extends BaseEntity {
 	private Boolean marketingAgree; // 선택약관 동의여부
 	private SignUpType signUpType;
 	private String password;
+	private Role role;
 
 	/** 마케팅 동의 철회 */
 	public void marketingWithdrawn() {
@@ -40,6 +41,11 @@ public class Member extends BaseEntity {
 	/** 카카오로 회원가입 */
 	public void kakaoSignUp() {
 		this.signUpType = SignUpType.KAKAO;
+	}
+
+	/** 여행자 등급 조정 */
+	public void updateRole(Role role) {
+		this.role = role;
 	}
 
 	public boolean isMarketingAgree() {
@@ -62,5 +68,6 @@ public class Member extends BaseEntity {
 		this.marketingAgree = marketingAgree;
 		this.isBlocked = false;
 		this.signUpType = SignUpType.EMAIL;
+		this.role = Role.ROLE_BEGINNER_TRAVELER;
 	}
 }
