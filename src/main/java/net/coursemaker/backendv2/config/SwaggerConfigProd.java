@@ -1,7 +1,10 @@
 package net.coursemaker.backendv2.config;
 
-import org.springframework.beans.factory.annotation.Configurable;
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -9,12 +12,19 @@ import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 
-@Configurable
-public class SwaggerConfig {
+@Configuration
+@Profile("prod")
+public class SwaggerConfigProd {
 
 	@Bean
 	public OpenAPI api() {
+
+		Server server = new Server();
+		server.setUrl("https://api.dev.course-maker.net:9191");
+		server.setDescription("코스메이커 요청 서버");
+
 		SecurityScheme apiKey = new SecurityScheme()
 			.type(SecurityScheme.Type.HTTP)
 			.in(SecurityScheme.In.HEADER)
@@ -28,6 +38,7 @@ public class SwaggerConfig {
 		return new OpenAPI()
 			.components(new Components().addSecuritySchemes("Bearer Token", apiKey))
 			.addSecurityItem(securityRequirement)
+			.servers(List.of(server))
 			.info(apiInfo());
 	}
 
@@ -39,8 +50,8 @@ public class SwaggerConfig {
 
 
 		return new Info()
-			.title("Course Maker API")
-			.description("코스메이커 API 스웨거 입니다.")
+			.title("[PROD] Course Maker Production API")
+			.description("코스메이커 운영서버 API 스웨거 입니다.")
 			.version("0.1.0")
 			.contact(contact);
 	}
