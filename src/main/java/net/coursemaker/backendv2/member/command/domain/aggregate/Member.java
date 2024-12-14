@@ -1,5 +1,7 @@
 package net.coursemaker.backendv2.member.command.domain.aggregate;
 
+import java.time.LocalDateTime;
+
 import net.coursemaker.backendv2.common.BaseEntity;
 
 import jakarta.persistence.Entity;
@@ -58,6 +60,10 @@ public class Member extends BaseEntity {
 
 	public boolean isKakaoLogin() {
 		return signUpType == SignUpType.KAKAO;
+	}
+
+	public void withdraw() {
+		this.setDeletedAt(LocalDateTime.now());
 	}
 
 	public Member(String email, String password, String nickname, String phoneNumber, boolean marketingAgree) {
