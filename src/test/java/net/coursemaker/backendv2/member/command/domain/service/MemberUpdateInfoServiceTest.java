@@ -266,4 +266,100 @@ class MemberUpdateInfoServiceTest {
 		}
 	}
 
+
+	@Nested
+	@DisplayName("마케팅 동의")
+	class MarketingAgree {
+
+		@Nested
+		@DisplayName("동의")
+		class Agree {
+
+			@Test
+			@DisplayName("동의 성공")
+			void success() {
+				// given
+				when(commandRepository.findByIdAndDeletedAtIsNull(anyLong())).thenReturn(Optional.of(mockMember));
+				when(mockUpdateInfo.getMemberId()).thenReturn(1L);
+				when(mockUpdateInfo.getPassword()).thenReturn("oldPassword");
+				when(mockUpdateInfo.getIsAdminUpdate()).thenReturn(false);
+				when(mockMember.isEmailLogin()).thenReturn(true);
+				when(passwordEncoder.matches(mockUpdateInfo.getPassword(), mockMember.getPassword())).thenReturn(true);
+
+				// when
+				assertDoesNotThrow(() ->
+					memberUpdateInfoService.agreeMarketingAgreement(mockUpdateInfo)
+				);
+
+				// then
+				verify(mockMember).marketingAgree();
+				verify(commandRepository).save(mockMember);
+			}
+
+			@Nested
+			@DisplayName("실패 케이스")
+			class FailCase {
+				@Test
+				@DisplayName("존재하지 않는 사용자일때")
+				void invalidMember() {
+					// given
+					when(commandRepository.findByIdAndDeletedAtIsNull(anyLong())).thenReturn(Optional.empty());
+					when(mockUpdateInfo.getMemberId()).thenReturn(1L);
+
+					// when, then
+					assertThrows(MemberNotFoundException.class, () ->
+						memberUpdateInfoService.agreeMarketingAgreement(mockUpdateInfo)
+					);
+				}
+			}
+		}
+
+		@Nested
+		@DisplayName("마케팅 동의 철회")
+		class WithdrawMarketingAgree {
+
+			@Nested
+			@DisplayName("동의 철회")
+			class Agree {
+
+				@Test
+				@DisplayName("동의 철회 성공")
+				void success() {
+					// given
+					when(commandRepository.findByIdAndDeletedAtIsNull(anyLong())).thenReturn(Optional.of(mockMember));
+					when(mockUpdateInfo.getMemberId()).thenReturn(1L);
+					when(mockUpdateInfo.getPassword()).thenReturn("oldPassword");
+					when(mockUpdateInfo.getIsAdminUpdate()).thenReturn(false);
+					when(mockMember.isEmailLogin()).thenReturn(true);
+					when(passwordEncoder.matches(mockUpdateInfo.getPassword(), mockMember.getPassword())).thenReturn(true);
+
+					// when
+					assertDoesNotThrow(() ->
+						memberUpdateInfoService.withdrawMarketingAgreement(mockUpdateInfo)
+					);
+
+					// then
+					verify(mockMember).marketingWithdrawn();
+					verify(commandRepository).save(mockMember);
+				}
+
+				@Nested
+				@DisplayName("실패 케이스")
+				class FailCase {
+					@Test
+					@DisplayName("존재하지 않는 사용자일때")
+					void invalidMember() {
+						// given
+						when(commandRepository.findByIdAndDeletedAtIsNull(anyLong())).thenReturn(Optional.empty());
+						when(mockUpdateInfo.getMemberId()).thenReturn(1L);
+
+						// when, then
+						assertThrows(MemberNotFoundException.class, () ->
+							memberUpdateInfoService.withdrawMarketingAgreement(mockUpdateInfo)
+						);
+					}
+				}
+			}
+		}
+	}
 }

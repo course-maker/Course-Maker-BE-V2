@@ -57,6 +57,28 @@ public class MemberUpdateInfoService {
 		commandRepository.save(updatedMember);
 	}
 
+	public void withdrawMarketingAgreement(MemberBasicUpdateInfo info) {
+		validateMemberIsExist(info);
+		validatePasswordIsCorrect(info);
+
+		Member updatedMember = getMemberAggregate(info);
+
+		updatedMember.marketingWithdrawn();
+
+		commandRepository.save(updatedMember);
+	}
+
+	public void agreeMarketingAgreement(MemberBasicUpdateInfo info) {
+		validateMemberIsExist(info);
+		validatePasswordIsCorrect(info);
+
+		Member updatedMember = getMemberAggregate(info);
+
+		updatedMember.marketingAgree();
+
+		commandRepository.save(updatedMember);
+	}
+
 	private Member getMemberAggregate(MemberBasicUpdateInfo info) {
 		return commandRepository.findByIdAndDeletedAtIsNull(info.getMemberId())
 			.orElseThrow(() ->
