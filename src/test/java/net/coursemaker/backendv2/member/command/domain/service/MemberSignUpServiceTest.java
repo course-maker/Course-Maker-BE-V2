@@ -3,7 +3,6 @@ package net.coursemaker.backendv2.member.command.domain.service;
 import net.coursemaker.backendv2.common.exception.DataFormatMisMatchException;
 import net.coursemaker.backendv2.member.command.domain.repository.MemberCommandRepository;
 import net.coursemaker.backendv2.member.command.domain.aggregate.Member;
-import net.coursemaker.backendv2.member.command.domain.aggregate.SignUpType;
 import net.coursemaker.backendv2.member.command.domain.dto.MemberBasicSignUpInfo;
 import net.coursemaker.backendv2.member.command.domain.exception.DuplicatedEmailException;
 import net.coursemaker.backendv2.member.command.domain.exception.DuplicatedNicknameException;
@@ -46,6 +45,7 @@ class MemberSignUpServiceTest {
 		MemberBasicSignUpInfo signupInfo = new MemberBasicSignUpInfo();
 		signupInfo.setEmail("email@email.com");
 		signupInfo.setPassword("password1!");
+		signupInfo.setName("이름");
 		signupInfo.setNickname("닉네임");
 		signupInfo.setPhone("010-1234-1234");
 		signupInfo.setMarketingAgree(true);
@@ -58,6 +58,25 @@ class MemberSignUpServiceTest {
 	}
 
 	@Test
+	@DisplayName("잘못된 이름 형식")
+	void 이름_잘못됨() {
+		// Given
+		MemberBasicSignUpInfo signupInfo = new MemberBasicSignUpInfo();
+		signupInfo.setEmail("email@email.com");
+		signupInfo.setPassword("password1!");
+		signupInfo.setNickname("닉네임");
+		signupInfo.setName("wrong");
+		signupInfo.setPhone("010-1234-1234");
+		signupInfo.setMarketingAgree(true);
+
+		// When
+		assertThrows(DataFormatMisMatchException.class, () -> memberSignupService.basicSignUp(signupInfo));
+
+		// Then
+		verify(commandRepository, never()).save(any(Member.class));
+	}
+
+	@Test
 	@DisplayName("잘못된 이메일 형식")
 	void 이메일_잘못됨() {
 		// Given
@@ -65,6 +84,7 @@ class MemberSignUpServiceTest {
 		signupInfo.setEmail("wrongEmail");
 		signupInfo.setPassword("password1!");
 		signupInfo.setNickname("닉네임");
+		signupInfo.setName("이름");
 		signupInfo.setPhone("010-1234-1234");
 		signupInfo.setMarketingAgree(true);
 
@@ -83,6 +103,7 @@ class MemberSignUpServiceTest {
 		signupInfo.setEmail("email@email.com");
 		signupInfo.setPassword("password1!");
 		signupInfo.setNickname("닉네임");
+		signupInfo.setName("이름");
 		signupInfo.setPhone("010-12-1234");
 		signupInfo.setMarketingAgree(true);
 
@@ -101,6 +122,7 @@ class MemberSignUpServiceTest {
 		signupInfo.setEmail("email@email.com");
 		signupInfo.setPassword("password1");
 		signupInfo.setNickname("닉네임");
+		signupInfo.setName("이름");
 		signupInfo.setPhone("010-1234-1234");
 		signupInfo.setMarketingAgree(true);
 
@@ -119,6 +141,7 @@ class MemberSignUpServiceTest {
 		Member existMember = new Member(
 			"email@email.com",
 			"password1!",
+			"이름",
 			"닉네임",
 			"010-1234-1234",
 			true
@@ -129,6 +152,7 @@ class MemberSignUpServiceTest {
 		signupInfo.setEmail("email1@email.com");
 		signupInfo.setPassword("password1!");
 		signupInfo.setNickname("닉네임");
+		signupInfo.setName("이름");
 		signupInfo.setPhone("010-1234-5678");
 		signupInfo.setMarketingAgree(true);
 
@@ -147,6 +171,7 @@ class MemberSignUpServiceTest {
 		Member existMember = new Member(
 			"email@email.com",
 			"password1!",
+			"이름",
 			"닉네임12",
 			"010-1234-5555",
 			true
@@ -157,6 +182,7 @@ class MemberSignUpServiceTest {
 		signupInfo.setEmail("email@email.com");
 		signupInfo.setPassword("password1!");
 		signupInfo.setNickname("닉네임");
+		signupInfo.setName("이름");
 		signupInfo.setPhone("010-1234-1234");
 		signupInfo.setMarketingAgree(true);
 
@@ -175,6 +201,7 @@ class MemberSignUpServiceTest {
 		Member existMember = new Member(
 			"email12@email.com",
 			"password1!",
+			"이름",
 			"닉네임12",
 			"010-1234-1234",
 			true
@@ -185,6 +212,7 @@ class MemberSignUpServiceTest {
 		signupInfo.setEmail("email@email.com");
 		signupInfo.setPassword("password1!");
 		signupInfo.setNickname("닉네임");
+		signupInfo.setName("이름");
 		signupInfo.setPhone("010-1234-1234");
 		signupInfo.setMarketingAgree(true);
 
