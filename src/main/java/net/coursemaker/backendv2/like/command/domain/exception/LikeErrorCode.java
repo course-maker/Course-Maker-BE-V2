@@ -1,7 +1,9 @@
 package net.coursemaker.backendv2.like.command.domain.exception;
 
 import org.springframework.http.HttpStatus;
+
 import net.coursemaker.backendv2.common.ErrorCode;
+
 import lombok.Getter;
 
 @Getter

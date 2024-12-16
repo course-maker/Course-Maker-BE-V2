@@ -1,36 +1,38 @@
 package net.coursemaker.backendv2.like.command.domain.aggregate;
 
-import jakarta.persistence.*;
+import net.coursemaker.backendv2.common.BaseEntity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import net.coursemaker.backendv2.common.BaseEntity;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "likes")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Like extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(name = "target_type")
-    @Enumerated(EnumType.STRING)
-    private LikeTargetType targetType;
+	@Enumerated(EnumType.STRING)
+	private LikeTargetType targetType;
 
-    @Column(name = "target_id")
-    private Long targetId;
+	private Long targetId;
 
-    @Column(name = "member_id")
-    private Long memberId;
+	private Long memberId;
 
-    public Like(LikeTargetType targetType, Long targetId, Long memberId) {
-        this.targetType = targetType;
-        this.targetId = targetId;
-        this.memberId = memberId;
-    }
+	public Like(LikeTargetType targetType, Long targetId, Long memberId) {
+		this.targetType = targetType;
+		this.targetId = targetId;
+		this.memberId = memberId;
+	}
 
 }

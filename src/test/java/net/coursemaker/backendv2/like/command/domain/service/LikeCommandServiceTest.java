@@ -1,17 +1,20 @@
 package net.coursemaker.backendv2.like.command.domain.service;
 
-import net.coursemaker.backendv2.like.command.domain.aggregate.Like;
-import net.coursemaker.backendv2.like.command.domain.aggregate.LikeTargetType;
-import net.coursemaker.backendv2.like.command.domain.dto.LikeCreateDto;
-import net.coursemaker.backendv2.like.command.domain.exception.DuplicateLikeException;
-import net.coursemaker.backendv2.like.command.domain.repository.LikeCommandRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.jupiter.api.Assertions.*;
+import net.coursemaker.backendv2.like.command.domain.aggregate.Like;
+import net.coursemaker.backendv2.like.command.domain.aggregate.LikeTargetType;
+import net.coursemaker.backendv2.like.command.domain.dto.LikeCreateDto;
+import net.coursemaker.backendv2.like.command.domain.exception.DuplicateLikeException;
+import net.coursemaker.backendv2.like.command.domain.repository.LikeCommandRepository;
+
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 

@@ -1,6 +1,7 @@
 package net.coursemaker.backendv2.like.command.domain.exception;
 
 import net.coursemaker.backendv2.common.RootException;
+
 import lombok.Getter;
 
 @Getter
