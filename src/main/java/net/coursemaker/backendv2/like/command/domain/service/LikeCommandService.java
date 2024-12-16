@@ -17,10 +17,7 @@ public class LikeCommandService {
     @Transactional
     public void createLike(LikeCreateDto dto) {
         // 중복 좋아요 검증
-        if (likeCommandRepository.existsByMemberIdAndTargetTypeAndTargetId(
-            dto.getMemberId(), dto.getTargetType(), dto.getTargetId())) {
-            throw new DuplicateLikeException("이미 좋아요를 누르셨습니다.", "좋아요 중복");
-        }
+		validateDuplicateLike(dto);
 
         Like like = new Like(dto.getTargetType(), dto.getTargetId(), dto.getMemberId());
         likeCommandRepository.save(like);
@@ -31,4 +28,10 @@ public class LikeCommandService {
         likeCommandRepository.deleteByMemberIdAndTargetTypeAndTargetId(
             memberId, targetType, targetId);
     }
+
+	private void validateDuplicateLike(LikeCreateDto dto) {
+		if (likeCommandRepository.existsByMemberIdAndTargetTypeAndTargetId(dto.getMemberId(), dto.getTargetType(), dto.getTargetId())) {
+			throw new DuplicateLikeException("이미 좋아요를 누르셨습니다.", "좋아요 중복");
+		}
+	}
 }
