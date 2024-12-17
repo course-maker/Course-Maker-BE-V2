@@ -79,7 +79,13 @@ public class Member extends BaseEntity {
 		this.name = name;
 	}
 
-	public Member(String email, String password, String name, String nickname, String phoneNumber, boolean marketingAgree) {
+	public Member(
+		String email,
+		String password,
+		String name,
+		String nickname,
+		String phoneNumber,
+		boolean marketingAgree) {
 		this.email = email;
 		this.password = password;
 		this.name = name;

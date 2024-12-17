@@ -5,13 +5,12 @@ import net.coursemaker.backendv2.common.RootException;
 import lombok.Getter;
 
 @Getter
-public class PasswordNotCorrectException extends RootException {
-
+public class VerificationCodeExpiredException extends RootException {
 	private final String clientMessage;
 	private final String logMessage;
 
-	public PasswordNotCorrectException(String clientMessage, String logMessage) {
-		super(MemberErrorCode.MEMBER_NOT_FOUND, logMessage);
+	public VerificationCodeExpiredException(String clientMessage, String logMessage) {
+		super(MemberErrorCode.EMAIL_VERIFICATION_EXPIRED, logMessage);
 		this.clientMessage = clientMessage;
 		this.logMessage = logMessage;
 	}
