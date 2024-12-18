@@ -37,7 +37,7 @@ class LikeCommandServiceTest {
 
 		// Given
 		LikeCreateDto dto = new LikeCreateDto(1L, LikeTargetType.COURSE, 1L);
-		when(likeCommandRepository.existsByMemberIdAndTargetTypeAndTargetId(1L, LikeTargetType.COURSE, 1L))
+		when(likeCommandRepository.existsLike(1L, LikeTargetType.COURSE, 1L))
 			.thenReturn(false);
 
 		// When
@@ -52,7 +52,7 @@ class LikeCommandServiceTest {
 	void createLike_DuplicateFail() {
 		// Given
 		LikeCreateDto dto = new LikeCreateDto(1L, LikeTargetType.COURSE, 1L);
-		when(likeCommandRepository.existsByMemberIdAndTargetTypeAndTargetId(1L, LikeTargetType.COURSE, 1L))
+		when(likeCommandRepository.existsLike(1L, LikeTargetType.COURSE, 1L))
 			.thenReturn(true);
 
 		// When & Then
@@ -74,7 +74,7 @@ class LikeCommandServiceTest {
 
 		// Then
 		verify(likeCommandRepository, times(1))
-			.deleteByMemberIdAndTargetTypeAndTargetId(memberId, targetType, targetId);
+			.deleteLike(memberId, targetType, targetId);
 	}
 
 	@Test
@@ -82,7 +82,7 @@ class LikeCommandServiceTest {
 	void createDestinationLike_Success() {
 		// Given
 		LikeCreateDto dto = new LikeCreateDto(1L, LikeTargetType.DESTINATION, 1L);
-		when(likeCommandRepository.existsByMemberIdAndTargetTypeAndTargetId(1L, LikeTargetType.DESTINATION, 1L))
+		when(likeCommandRepository.existsLike(1L, LikeTargetType.DESTINATION, 1L))
 			.thenReturn(false);
 
 		// When

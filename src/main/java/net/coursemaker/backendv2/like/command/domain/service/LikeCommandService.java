@@ -27,12 +27,12 @@ public class LikeCommandService {
 
 	@Transactional
 	public void deleteLike(Long memberId, LikeTargetType targetType, Long targetId) {
-		likeCommandRepository.deleteByMemberIdAndTargetTypeAndTargetId(
+		likeCommandRepository.deleteLike(
 			memberId, targetType, targetId);
 	}
 
 	private void validateDuplicateLike(LikeCreateDto dto) {
-		if (likeCommandRepository.existsByMemberIdAndTargetTypeAndTargetId(
+		if (likeCommandRepository.existsLike(
 			dto.getMemberId(), dto.getTargetType(), dto.getTargetId())) {
 			throw new DuplicateLikeException("이미 좋아요를 누르셨습니다.", "좋아요 중복");
 		}
