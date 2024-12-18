@@ -1,12 +1,13 @@
 package net.coursemaker.backendv2.destination.command.domain.aggregate;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
+
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,15 +16,15 @@ import net.coursemaker.backendv2.member.command.domain.aggregate.Member;
 
 @Entity
 @Getter
-@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Destination extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "memberId")
-	private Member member;
+	@Column(name = "memberId")
+	private Long memberId;
 
 	@Column(name = "name", length = 30)
 	private String name;
@@ -40,14 +41,12 @@ public class Destination extends BaseEntity {
 	@Column(name = "apiContent", columnDefinition = "TEXT")
 	private String apiContent;
 
-	@Column(name = "location", length = 50)
-	private String location;
+	@Embedded
+	private Location location;
 
-	@Column(name = "longitude", precision = 15, scale = 12)
-	private BigDecimal longitude;
-
-	@Column(name = "latitude", precision = 15, scale = 12)
-	private BigDecimal latitude;
+	@ElementCollection
+	@Column(name = "tag_id")
+	private List<Long> tagIds;
 
 	@Column(name = "averageRating", nullable = false)
 	private Double averageRating;
@@ -76,6 +75,10 @@ public class Destination extends BaseEntity {
 	@Column(name = "likeCount")
 	private Integer likeCount;
 
+	public Destination(Long memberId, String name, String url, String content, Location locationEntity, double v, boolean b, Long contentId, Integer seq, String apiContent) {
+		super();
+	}
+
 	public void incrementViews() {
 		this.views += 1;
 	}
@@ -85,4 +88,16 @@ public class Destination extends BaseEntity {
 		this.setDeletedAt(LocalDateTime.now());
 	}
 
+	public void update(Long memberId, String name, String pictureLink, String content, Location location,
+		Double averageRating, Boolean disabled, Long contentId, Integer seq) {
+		this.memberId = memberId;
+		this.name = name;
+		this.pictureLink = pictureLink;
+		this.content = content;
+		this.location = location;
+		this.averageRating = averageRating;
+		this.disabled = disabled;
+		this.contentId = contentId;
+		this.seq = seq;
+	}
 }

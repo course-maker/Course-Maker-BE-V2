@@ -10,12 +10,13 @@ import lombok.Data;
 import java.util.List;
 
 import net.coursemaker.backendv2.destination.command.domain.aggregate.Destination;
+import net.coursemaker.backendv2.destination.command.domain.aggregate.Location;
 import net.coursemaker.backendv2.member.command.domain.aggregate.Member;
 
 @Data
 public class RequestDto {
-	@Schema(description = "유저 닉네임", example = "coursemaker", hidden = true)
-	private String nickname; // 유저 이름
+	@Schema(description = "유저 ID", example = "1", hidden = true)
+	private Long memberId; // 유저 ID
 
 	@Schema(description = "여행지 이름", defaultValue = "역시 부산은 해운대!")
 	@NotNull(message = "여행지 이름을 입력하세요.")
@@ -46,59 +47,29 @@ public class RequestDto {
 	@Schema(description = "무장애 여행지 여부", nullable = true, hidden = true)
 	private Boolean disabled;
 
-	// tourApi에서 Destination DB로 저장될 때 중복된 데이터 판별 용으로 사용됩니다.
 	@Schema(description = "Tour Api에서 불러온 공공데이터 여행지일 경우 그 여행지에 해당하는 고유 Content ID 값 입니다. tourApi에서 Destination DB로 저장될 때 중복된 데이터 판별 용으로 사용됩니다.", nullable = true, hidden = true)
 	private Long contentId;
 
-	// busanApi에서 Destination DB로 저장될 때 중복된 데이터 판별 용으로 사용됩니다.
 	@Schema(description ="busanApi에서 Destination DB로 저장될 때 중복된 데이터 판별 용으로 사용됩니다.", nullable = true, hidden = true)
 	private Integer seq;
-
-	@Schema(description = "부산광역시 공공데이터 또는 Tour Api 공공데이터일 경우에 1이라는 값이 할당됩니다.", example = "false", defaultValue = "false", nullable = true, hidden = true)
-	private Boolean isApiData;
 
 	@Schema(description = "공공데이터 여행지의 설명입니다.", nullable = true, hidden = true)
 	private String apiContent;
 
-
 	// RequestDto를 Destination 엔티티로 변환하는 메서드
-	public Destination toEntity(Member member) {
-		Destination destination = new Destination();
-		destination.setMember(member);
-		destination.setName(this.name);
-
-		if (this.pictureLink == null || this.pictureLink.isEmpty() || this.pictureLink.isBlank()) {
-			destination.setPictureLink("https://i.ibb.co/XsNmR3Q/url-null.jpg");
-		} else {
-			destination.setPictureLink(this.pictureLink);
-		}
-
-		destination.setContent(this.content);
-		destination.setLocation(this.location.getAddress());
-		destination.setLongitude(this.location.getLongitude());
-		destination.setLatitude(this.location.getLatitude());
-		destination.setAverageRating(this.averageRating);
-
-		if (this.disabled == null) {
-			destination.setDisabled(false);
-		} else {
-			destination.setDisabled(this.disabled);
-		}
-
-		destination.setContentId(this.contentId);
-
-		if (this.isApiData == null) {
-			destination.setIsApiData(false);
-		} else {
-			destination.setIsApiData(this.isApiData);
-		}
-		destination.setSeq(this.seq);
-
-		destination.setWishCount(0);
-		destination.setLikeCount(0);
-		destination.setReviewCount(0);
-		destination.setApiContent(this.apiContent);
-
-		return destination;
+	public Destination toEntity(Long memberId) {
+		Location locationEntity = new Location(this.location.getAddress(), this.location.getLongitude(), this.location.getLatitude());
+		return new Destination(
+			memberId,
+			this.name,
+			this.pictureLink != null && !this.pictureLink.isBlank() ? this.pictureLink : "https://i.ibb.co/XsNmR3Q/url-null.jpg",
+			this.content,
+			locationEntity,
+			this.averageRating != null ? this.averageRating : 0.0,
+			this.disabled != null ? this.disabled : false,
+			this.contentId,
+			this.seq,
+			this.apiContent
+		);
 	}
 }

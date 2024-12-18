@@ -3,11 +3,52 @@ package net.coursemaker.backendv2.destination.command.domain.service;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 import net.coursemaker.backendv2.destination.command.domain.aggregate.Destination;
+import net.coursemaker.backendv2.destination.command.domain.repository.DestinationRepository;
 
 @Service
 public class DestinationDomainService {
+
+	private final DestinationRepository destinationRepository;
+
+	public DestinationDomainService(DestinationRepository destinationRepository) {
+		this.destinationRepository = destinationRepository;
+	}
+
+	/**
+	 * 여행지를 저장합니다.
+	 * @param destination 여행지 엔티티
+	 */
+	public void saveDestination(Destination destination) {
+		destinationRepository.save(destination);
+	}
+
+	/**
+	 * ID로 여행지를 조회합니다.
+	 * @param id 여행지 ID
+	 * @return 여행지 엔티티
+	 */
+	public Destination findDestinationById(Long id) {
+		return destinationRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("ID가 " + id + "인 여행지를 찾을 수 없습니다."));
+	}
+
+	/**
+	 * ID로 여행지가 존재하는지 확인합니다.
+	 * @param id 여행지 ID
+	 * @return 존재 여부
+	 */
+	public boolean existsDestinationById(Long id) {
+		return destinationRepository.existsById(id);
+	}
+
+	/**
+	 * ID로 여행지를 삭제합니다.
+	 * @param id 여행지 ID
+	 */
+	public void deleteDestinationById(Long id) {
+		destinationRepository.deleteById(id);
+	}
 
 	/**
 	 * 여행지에 태그를 추가하는 도메인 로직.

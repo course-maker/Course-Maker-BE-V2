@@ -71,16 +71,16 @@ public class DestinationDto {
 	@Schema(description = "해당 여행지 찜이 로그인 한 사용자가 찜한 여행지인지 여부", nullable = true)
 	private Boolean isMyWishDestination;
 
-	@Schema(description = "해당 여행지 좋아요를 로그인 한 사용자가 좋아요한 여행지인지 여부" , nullable = true)
+	@Schema(description = "해당 여행지 좋아요를 로그인 한 사용자가 좋아요한 여행지인지 여부", nullable = true)
 	private Boolean isMyLikeDestination;
 
 	// Destination 엔티티를 DestinationDto로 변환하는 메서드
-	public static DestinationDto toDto(Destination destination, List<TagResponseDto> tagDtos,
+	public static DestinationDto toDto(Destination destination, String nickname, List<TagResponseDto> tagDtos,
 		Boolean isApiData, Double averageRating, Boolean isMyDestination, Integer reviewCount,
 		Integer wishCount, Integer likeCount, Boolean isMyWishDestination, Boolean isMyLikeDestination) {
 		DestinationDto dto = new DestinationDto();
 		dto.setId(destination.getId());
-		dto.setNickname(destination.getMember().getNickname()); // 누가 만들었는지 설정
+		dto.setNickname(nickname); // 유저 닉네임 설정
 		dto.setName(destination.getName());
 		dto.setViews(destination.getViews());
 		dto.setPictureLink(destination.getPictureLink());
@@ -89,9 +89,9 @@ public class DestinationDto {
 		dto.setTags(tagDtos);
 		dto.setDisabled(destination.getDisabled());
 		LocationDto location = new LocationDto(
-			destination.getLocation(),
-			destination.getLongitude(),
-			destination.getLatitude()
+			destination.getLocation().getLocationName(),
+			destination.getLocation().getLongitude(),
+			destination.getLocation().getLatitude()
 		);
 		dto.setLocation(location);
 		dto.setAverageRating(averageRating);

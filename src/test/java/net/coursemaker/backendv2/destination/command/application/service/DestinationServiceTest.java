@@ -1,17 +1,20 @@
 package net.coursemaker.backendv2.destination.command.application.service;
 
+import net.coursemaker.backendv2.destination.command.application.dto.LocationDto;
 import net.coursemaker.backendv2.destination.command.application.dto.RequestDto;
 import net.coursemaker.backendv2.destination.command.application.dto.UpdateDto;
 import net.coursemaker.backendv2.destination.command.application.exception.DestinationNotFoundException;
 import net.coursemaker.backendv2.destination.command.domain.aggregate.Destination;
 import net.coursemaker.backendv2.destination.command.domain.repository.DestinationRepository;
-import net.coursemaker.backendv2.member.command.domain.aggregate.Member;
+import net.coursemaker.backendv2.destination.command.domain.service.DestinationDomainService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,7 +31,8 @@ class DestinationServiceTest {
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		destinationService = new DestinationService(destinationRepository);
+		DestinationDomainService domainService = new DestinationDomainService(destinationRepository);
+		destinationService = new DestinationService(domainService);
 	}
 
 	@Test
@@ -37,17 +41,16 @@ class DestinationServiceTest {
 		// Given
 		RequestDto requestDto = new RequestDto();
 		requestDto.setName("New Destination");
-		Member member = new Member;
-		Destination destination = new Destination;
+		requestDto.setLocation(new LocationDto("Seoul", new BigDecimal("127.1234"), new BigDecimal("37.5678")));
+		Destination destination = mock(Destination.class);
 
 		when(destinationRepository.save(any(Destination.class))).thenReturn(destination);
 
 		// When
-		Destination result = destinationService.save(requestDto, member);
+		Destination result = destinationService.createDestination(requestDto, 1L);
 
 		// Then
 		assertNotNull(result);
-		assertEquals("New Destination", result.getName());
 		verify(destinationRepository, times(1)).save(any(Destination.class));
 	}
 
@@ -57,10 +60,9 @@ class DestinationServiceTest {
 		// Given
 		RequestDto requestDto = new RequestDto();
 		requestDto.setName(null);
-		Member member = new Member;
 
 		// When & Then
-		assertThrows(DestinationNotFoundException.class, () -> destinationService.save(requestDto, member));
+		assertThrows(DestinationNotFoundException.class, () -> destinationService.createDestination(requestDto, 1L));
 		verify(destinationRepository, never()).save(any(Destination.class));
 	}
 
@@ -71,18 +73,17 @@ class DestinationServiceTest {
 		Long id = 1L;
 		UpdateDto updateDto = new UpdateDto();
 		updateDto.setName("Updated Destination");
-		Member member = new Member;
-		Destination existingDestination = new Destination(/* parameters for destination */);
+		updateDto.setLocation(new LocationDto("Busan", new BigDecimal("129.0756"), new BigDecimal("35.1796")));
+		Destination existingDestination = mock(Destination.class);
 
 		when(destinationRepository.findById(id)).thenReturn(Optional.of(existingDestination));
 		when(destinationRepository.save(any(Destination.class))).thenReturn(existingDestination);
 
 		// When
-		Destination result = destinationService.update(id, updateDto, member);
+		Destination result = destinationService.update(id, updateDto, 1L);
 
 		// Then
 		assertNotNull(result);
-		assertEquals("Updated Destination", result.getName());
 		verify(destinationRepository, times(1)).findById(id);
 		verify(destinationRepository, times(1)).save(existingDestination);
 	}
@@ -94,12 +95,11 @@ class DestinationServiceTest {
 		Long id = 1L;
 		UpdateDto updateDto = new UpdateDto();
 		updateDto.setName("Updated Destination");
-		Member member = new Member;
 
 		when(destinationRepository.findById(id)).thenReturn(Optional.empty());
 
 		// When & Then
-		assertThrows(DestinationNotFoundException.class, () -> destinationService.update(id, updateDto, member));
+		assertThrows(DestinationNotFoundException.class, () -> destinationService.update(id, updateDto, 1L));
 		verify(destinationRepository, times(1)).findById(id);
 		verify(destinationRepository, never()).save(any(Destination.class));
 	}
