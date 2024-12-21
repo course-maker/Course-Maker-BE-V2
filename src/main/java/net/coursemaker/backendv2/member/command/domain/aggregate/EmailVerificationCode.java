@@ -22,6 +22,7 @@ public class EmailVerificationCode {
 	private Boolean isVerified;
 
 	private LocalDateTime sendAt;
+	private LocalDateTime verifiedAt;
 	private LocalDateTime expiredAt;
 
 	public boolean isExpired() {
@@ -34,6 +35,7 @@ public class EmailVerificationCode {
 	public void verified(String code) {
 		if (verificationCode.equals(code)) {
 			isVerified = true;
+			verifiedAt = LocalDateTime.now();
 		} else {
 			isVerified = false;
 		}
