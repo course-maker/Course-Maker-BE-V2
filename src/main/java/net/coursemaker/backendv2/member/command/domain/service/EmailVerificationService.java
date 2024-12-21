@@ -49,26 +49,28 @@ public class EmailVerificationService {
 		emailVerificationRepository.save(emailCode);
 	}
 
-	public void validateCode(String email, String code) {
+	public void verifyCode(String email, String code) {
 		EmailVerificationCode verificationCode = emailVerificationRepository.findByEmail(email).orElseThrow(() ->
 			new VerificationCodeNotSendException("인증 코드가 전송되지 않았습니다.", "이메일 인증코드 전송 안됨."));
 
+		/*인증코드 만료여부 검증*/
+		validateCodeIsExpired(verificationCode);
+
+		/*인증코드 일치여부 검증*/
 		verificationCode.verified(code);
 
-		if (verificationCode.isExpired()) {
-			throw new VerificationCodeExpiredException(
-				"이메일 인증 시간이 만료됬습니다.",
-				"이메일 인증코드 만료. email: " + email);
-		}
-
+		/*인증코드 불일치시 예외 반환*/
 		if (!verificationCode.isVerifiedSuccess()) {
 			throw new VerificationCodeMisMatchException(
 				"인증 코드가 일치하지 않습니다.",
 				"인증코드 불일치. email: " + email);
 		}
+	}
 
-		/*인증 완료됬으면 삭제함*/
-		emailVerificationRepository.deleteById(verificationCode.getId());
+	public boolean isVerified(String email) {
+		EmailVerificationCode verificationCode = emailVerificationRepository.findByEmail(email).orElseThrow(() ->
+			new VerificationCodeNotSendException("인증 코드가 전송되지 않았습니다.", "이메일 인증코드 전송 안됨."));
+		return verificationCode.isVerifiedSuccess();
 	}
 
 
@@ -78,4 +80,11 @@ public class EmailVerificationService {
 		return uuid.toString().split("-")[0];
 	}
 
+	private void validateCodeIsExpired(EmailVerificationCode code) {
+		if (code.isExpired()) {
+			throw new VerificationCodeExpiredException(
+				"이메일 인증 시간이 만료됬습니다.",
+				"이메일 인증코드 만료. email: " + code.getEmail());
+		}
+	}
 }

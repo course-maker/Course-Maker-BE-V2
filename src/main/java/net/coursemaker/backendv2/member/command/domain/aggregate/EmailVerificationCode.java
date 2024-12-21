@@ -25,14 +25,14 @@ public class EmailVerificationCode {
 	private LocalDateTime expiredAt;
 
 	public boolean isExpired() {
-		if(LocalDateTime.now().isAfter(expiredAt)) {
+		if (LocalDateTime.now().isAfter(expiredAt)) {
 			return true;
 		}
 		return false;
 	}
 
 	public void verified(String code) {
-		if(verificationCode.equals(code)) {
+		if (verificationCode.equals(code)) {
 			isVerified = true;
 		} else {
 			isVerified = false;
@@ -40,7 +40,7 @@ public class EmailVerificationCode {
 	}
 
 	public boolean isVerifiedSuccess() {
-		if(!isExpired() && this.isVerified) {
+		if (!isExpired() && this.isVerified) {
 			return true;
 		}
 		return false;
