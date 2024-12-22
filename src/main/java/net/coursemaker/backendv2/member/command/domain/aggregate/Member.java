@@ -22,6 +22,7 @@ public class Member extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String email;
+	private String name;
 	private String nickname;
 	private String phoneNumber;
 	private Boolean isBlocked; // 정지된 사용자
@@ -66,9 +67,28 @@ public class Member extends BaseEntity {
 		this.setDeletedAt(LocalDateTime.now());
 	}
 
-	public Member(String email, String password, String nickname, String phoneNumber, boolean marketingAgree) {
+	public void changePassword(String password) {
+		this.password = password;
+	}
+
+	public void updatePhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public void updateName(String name) {
+		this.name = name;
+	}
+
+	public Member(
+		String email,
+		String password,
+		String name,
+		String nickname,
+		String phoneNumber,
+		boolean marketingAgree) {
 		this.email = email;
 		this.password = password;
+		this.name = name;
 		this.nickname = nickname;
 		this.phoneNumber = phoneNumber;
 		this.marketingAgree = marketingAgree;

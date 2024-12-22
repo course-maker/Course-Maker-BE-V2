@@ -23,6 +23,7 @@ public class MemberSignUpService {
 
 	public void basicSignUp(MemberBasicSignUpInfo signupInfo) {
 		validateEmail(signupInfo.getEmail());
+		validateName(signupInfo.getName());
 		validatePhoneNumber(signupInfo.getPhone());
 		validateNickname(signupInfo.getNickname());
 		validatePassword(signupInfo.getPassword());
@@ -31,6 +32,7 @@ public class MemberSignUpService {
 		Member member = new Member(
 			signupInfo.getEmail(),
 			encryptedPassword,
+			signupInfo.getName(),
 			signupInfo.getNickname(),
 			signupInfo.getPhone(),
 			signupInfo.isMarketingAgree()
@@ -72,6 +74,15 @@ public class MemberSignUpService {
 				"이미 가입된 전화번호 입니다.",
 				"전화번호 중복: " + phoneNumber);
 		});
+	}
+
+	private void validateName(String name) {
+		String nameRegex = "^[가-힣]{2,}$";
+		if (name == null || !name.matches(nameRegex)) {
+			throw new DataFormatMisMatchException(
+				"이름은 최소 2글자 이상의 한글이어야 합니다.",
+				"이름 형식 오류: " + name);
+		}
 	}
 
 	private void validateNickname(String nickname) {
