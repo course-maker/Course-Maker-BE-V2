@@ -7,7 +7,7 @@ import net.coursemaker.backendv2.destination.command.domain.exception.Destinatio
 import net.coursemaker.backendv2.destination.command.domain.aggregate.Destination;
 import net.coursemaker.backendv2.destination.command.domain.repository.DestinationRepository;
 import net.coursemaker.backendv2.destination.command.domain.service.DestinationDomainService;
-import net.coursemaker.backendv2.destination.service.DestinationService;
+import net.coursemaker.backendv2.destination.command.domain.service.DestinationService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

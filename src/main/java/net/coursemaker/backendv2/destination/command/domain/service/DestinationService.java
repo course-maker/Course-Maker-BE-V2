@@ -1,10 +1,10 @@
-package net.coursemaker.backendv2.destination.service;
+package net.coursemaker.backendv2.destination.command.domain.service;
 
 import net.coursemaker.backendv2.destination.command.domain.dto.RequestDto;
 import net.coursemaker.backendv2.destination.command.domain.dto.UpdateDto;
 import net.coursemaker.backendv2.destination.command.domain.exception.DestinationNotFoundException;
 import net.coursemaker.backendv2.destination.command.domain.aggregate.Destination;
-import net.coursemaker.backendv2.destination.command.domain.service.DestinationDomainService;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
