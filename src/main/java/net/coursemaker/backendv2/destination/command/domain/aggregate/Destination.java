@@ -1,6 +1,7 @@
 package net.coursemaker.backendv2.destination.command.domain.aggregate;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ import net.coursemaker.backendv2.member.command.domain.aggregate.Member;
 @Entity
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Destination extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -75,8 +76,25 @@ public class Destination extends BaseEntity {
 	@Column(name = "likeCount")
 	private Integer likeCount;
 
-	public Destination(Long memberId, String name, String url, String content, Location locationEntity, double v, boolean b, Long contentId, Integer seq, String apiContent) {
+	public Destination(Long memberId, String name, String pictureLink, String content, Location location, Double averageRating, Boolean isApiData, Long contentId, Integer seq, String apiContent) {
 		super();
+		this.memberId = memberId;
+		this.name = name;
+		this.pictureLink = pictureLink;
+		this.content = content;
+		this.location = location;
+		this.averageRating = averageRating != null ? averageRating : 0.0;
+		this.isApiData = isApiData != null ? isApiData : false;
+		this.contentId = contentId;
+		this.seq = seq;
+		this.apiContent = apiContent;
+
+		// 기본 초기화 값 설정
+		this.views = 0;
+		this.wishCount = 0;
+		this.reviewCount = 0;
+		this.likeCount = 0;
+		this.disabled = false;
 	}
 
 	public void incrementViews() {
