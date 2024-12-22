@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import net.coursemaker.backendv2.destination.command.application.exception.DestinationNotFoundException;
+import net.coursemaker.backendv2.destination.command.domain.exception.DestinationNotFoundException;
 import net.coursemaker.backendv2.destination.command.domain.aggregate.Destination;
 import net.coursemaker.backendv2.destination.command.domain.repository.DestinationRepository;
 

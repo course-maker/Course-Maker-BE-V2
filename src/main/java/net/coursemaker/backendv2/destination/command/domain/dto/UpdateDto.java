@@ -1,4 +1,4 @@
-package net.coursemaker.backendv2.destination.command.application.dto;
+package net.coursemaker.backendv2.destination.command.domain.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
@@ -11,10 +11,9 @@ import java.util.List;
 
 import net.coursemaker.backendv2.destination.command.domain.aggregate.Destination;
 import net.coursemaker.backendv2.destination.command.domain.aggregate.Location;
-import net.coursemaker.backendv2.member.command.domain.aggregate.Member;
 
 @Data
-public class RequestDto {
+public class UpdateDto {
 	@Schema(description = "유저 ID", example = "1", hidden = true)
 	private Long memberId; // 유저 ID
 
@@ -53,13 +52,9 @@ public class RequestDto {
 	@Schema(description ="busanApi에서 Destination DB로 저장될 때 중복된 데이터 판별 용으로 사용됩니다.", nullable = true, hidden = true)
 	private Integer seq;
 
-	@Schema(description = "공공데이터 여행지의 설명입니다.", nullable = true, hidden = true)
-	private String apiContent;
-
-	// RequestDto를 Destination 엔티티로 변환하는 메서드
-	public Destination toEntity(Long memberId) {
+	public void toUpdate(Destination destination, Long memberId) {
 		Location locationEntity = new Location(this.location.getAddress(), this.location.getLongitude(), this.location.getLatitude());
-		return new Destination(
+		destination.update(
 			memberId,
 			this.name,
 			this.pictureLink != null && !this.pictureLink.isBlank() ? this.pictureLink : "https://i.ibb.co/XsNmR3Q/url-null.jpg",
@@ -68,8 +63,7 @@ public class RequestDto {
 			this.averageRating != null ? this.averageRating : 0.0,
 			this.disabled != null ? this.disabled : false,
 			this.contentId,
-			this.seq,
-			this.apiContent
+			this.seq
 		);
 	}
 }

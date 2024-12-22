@@ -1,12 +1,13 @@
 package net.coursemaker.backendv2.destination.command.application.service;
 
-import net.coursemaker.backendv2.destination.command.application.dto.LocationDto;
-import net.coursemaker.backendv2.destination.command.application.dto.RequestDto;
-import net.coursemaker.backendv2.destination.command.application.dto.UpdateDto;
-import net.coursemaker.backendv2.destination.command.application.exception.DestinationNotFoundException;
+import net.coursemaker.backendv2.destination.command.domain.dto.LocationDto;
+import net.coursemaker.backendv2.destination.command.domain.dto.RequestDto;
+import net.coursemaker.backendv2.destination.command.domain.dto.UpdateDto;
+import net.coursemaker.backendv2.destination.command.domain.exception.DestinationNotFoundException;
 import net.coursemaker.backendv2.destination.command.domain.aggregate.Destination;
 import net.coursemaker.backendv2.destination.command.domain.repository.DestinationRepository;
 import net.coursemaker.backendv2.destination.command.domain.service.DestinationDomainService;
+import net.coursemaker.backendv2.destination.service.DestinationService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

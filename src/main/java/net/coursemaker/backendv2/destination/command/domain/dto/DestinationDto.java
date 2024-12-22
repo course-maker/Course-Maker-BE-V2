@@ -1,4 +1,4 @@
-package net.coursemaker.backendv2.destination.command.application.dto;
+package net.coursemaker.backendv2.destination.command.domain.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
