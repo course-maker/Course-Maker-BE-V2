@@ -3,6 +3,8 @@ package net.coursemaker.backendv2.destination.command.domain.service;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import net.coursemaker.backendv2.destination.command.application.exception.DestinationNotFoundException;
 import net.coursemaker.backendv2.destination.command.domain.aggregate.Destination;
 import net.coursemaker.backendv2.destination.command.domain.repository.DestinationRepository;
 
@@ -30,7 +32,7 @@ public class DestinationDomainService {
 	 */
 	public Destination findDestinationById(Long id) {
 		return destinationRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("ID가 " + id + "인 여행지를 찾을 수 없습니다."));
+			.orElseThrow(() -> new DestinationNotFoundException("ID가 " + id + "인 여행지를 찾을 수 없습니다."));
 	}
 
 	/**
