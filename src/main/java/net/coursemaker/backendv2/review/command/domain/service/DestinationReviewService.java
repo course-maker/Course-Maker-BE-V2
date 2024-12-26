@@ -23,42 +23,41 @@ public class DestinationReviewService {
 
 	@Transactional
 	public DestinationReview createReview(RequestDestinationDto request, Long memberId, Long destinationId) {
-		log.info("[DestinationReviewService] Create Review - Member ID: {}, Destination ID: {}", memberId, destinationId);
+		log.info("[DestinationReviewService] 리뷰 생성 - 회원 ID: {}, 목적지 ID: {}", memberId, destinationId);
 		return destinationReviewDomainService.createReview(request, memberId, destinationId);
 	}
 
 	@Transactional
 	public DestinationReview updateReview(Long reviewId, RequestDestinationDto request, Long memberId) {
-		log.info("[DestinationReviewService] Update Review - Review ID: {}, Member ID: {}", reviewId, memberId);
+		log.info("[DestinationReviewService] 리뷰 수정 - 리뷰 ID: {}, 회원 ID: {}", reviewId, memberId);
 		return destinationReviewDomainService.updateReview(reviewId, request, memberId);
 	}
 
 	@Transactional
 	public void deleteReview(Long reviewId, Long memberId) {
-		log.info("[DestinationReviewService] Delete Review - Review ID: {}, Member ID: {}", reviewId, memberId);
+		log.info("[DestinationReviewService] 리뷰 삭제 - 리뷰 ID: {}, 회원 ID: {}", reviewId, memberId);
 		destinationReviewDomainService.deleteReview(reviewId, memberId);
 	}
 
 	public ResponseDestinationDto getReview(Long reviewId) {
-		log.info("[DestinationReviewService] Get Review - Review ID: {}", reviewId);
+		log.info("[DestinationReviewService] 리뷰 조회 - 리뷰 ID: {}", reviewId);
 		DestinationReview review = destinationReviewDomainService.findById(reviewId);
 		return ResponseDestinationDto.fromEntity(review);
 	}
 
 	public List<ResponseDestinationDto> getReviewsByMember(Long memberId, Pageable pageable) {
-		log.info("[DestinationReviewService] Get Reviews by Member - Member ID: {}", memberId);
+		log.info("[DestinationReviewService] 회원별 리뷰 조회 - 회원 ID: {}", memberId);
 		Page<DestinationReview> reviews = destinationReviewDomainService.findReviewsByMember(memberId, pageable);
 		return reviews.stream().map(ResponseDestinationDto::fromEntity).collect(Collectors.toList());
 	}
 
 	public void addRecommendation(Long reviewId, Long memberId) {
-		log.info("[DestinationReviewService] Add Recommendation - Review ID: {}, Member ID: {}", reviewId, memberId);
+		log.info("[DestinationReviewService] 추천 추가 - 리뷰 ID: {}, 회원 ID: {}", reviewId, memberId);
 		destinationReviewDomainService.addRecommendation(reviewId, memberId);
 	}
 
 	public void removeRecommendation(Long reviewId, Long memberId) {
-		log.info("[DestinationReviewService] Remove Recommendation - Review ID: {}, Member ID: {}", reviewId, memberId);
+		log.info("[DestinationReviewService] 추천 삭제 - 리뷰 ID: {}, 회원 ID: {}", reviewId, memberId);
 		destinationReviewDomainService.removeRecommendation(reviewId, memberId);
 	}
 }
-
