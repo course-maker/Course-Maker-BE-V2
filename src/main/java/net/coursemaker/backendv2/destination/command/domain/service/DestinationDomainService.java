@@ -32,7 +32,7 @@ public class DestinationDomainService {
 	 */
 	public Destination findDestinationById(Long id) {
 		return destinationRepository.findById(id)
-			.orElseThrow(() -> new DestinationNotFoundException("ID가 " + id + "인 여행지를 찾을 수 없습니다."));
+			.orElseThrow(() -> new DestinationNotFoundException("ID가 " + id + "인 여행지를 찾을 수 없습니다.", "여행지 조회 실패: ID=" + id));
 	}
 
 	/**
