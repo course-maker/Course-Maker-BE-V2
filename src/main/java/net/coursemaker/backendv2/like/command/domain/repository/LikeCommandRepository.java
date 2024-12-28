@@ -3,11 +3,10 @@ package net.coursemaker.backendv2.like.command.domain.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import net.coursemaker.backendv2.like.command.domain.aggregate.Like;
 import net.coursemaker.backendv2.like.command.domain.aggregate.LikeTargetType;
-import org.springframework.data.repository.query.Param;
-
 
 public interface LikeCommandRepository extends JpaRepository<Like, Long> {
 
