@@ -16,9 +16,6 @@ public interface DestinationRepository extends JpaRepository<Destination, Long> 
 	// 소프트 딜리트된 엔티티를 제외한 전체 목록 조회
 	Page<Destination> findAllByDeletedAtIsNull(Pageable pageable);
 
-	// 소프트 딜리트된 엔티티를 제외한 전체 목록 조회
-	List<Destination> findAllByDeletedAtIsNull();
-
 	// 소프트 딜리트된 항목을 제외하고 ID로 조회
 	Optional<Destination> findByIdAndDeletedAtIsNull(Long id);
 

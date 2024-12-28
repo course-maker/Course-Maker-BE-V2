@@ -1,5 +1,7 @@
 package net.coursemaker.backendv2.destination.command.domain.service;
 
+import static org.springframework.data.jpa.domain.AbstractPersistable_.*;
+
 import net.coursemaker.backendv2.destination.command.domain.dto.RequestDto;
 import net.coursemaker.backendv2.destination.command.domain.dto.UpdateDto;
 import net.coursemaker.backendv2.destination.command.domain.exception.DestinationNotFoundException;
@@ -27,7 +29,7 @@ public class DestinationService {
 	public Destination createDestination(RequestDto request, Long memberId) {
 
 		if (request.getName() == null || request.getName().isBlank()) {
-			throw new DestinationNotFoundException("여행지 이름은 비어 있을 수 없습니다.");
+			throw new DestinationNotFoundException("ID가 " + id + "인 여행지를 찾을 수 없습니다.", "여행지 조회 실패: ID=" + id);
 		}
 
 		// DTO를 엔티티로 변환
@@ -66,7 +68,7 @@ public class DestinationService {
 	public void deleteById(Long id) {
 		// 여행지 존재 여부 확인 및 삭제 처리
 		if (!destinationDomainService.existsDestinationById(id)) {
-			throw new DestinationNotFoundException("ID가 " + id + "인 여행지를 찾을 수 없습니다.");
+			throw new DestinationNotFoundException("ID가 " + id + "인 여행지를 찾을 수 없습니다.", "여행지 조회 실패: ID=" + id);
 		}
 		destinationDomainService.deleteDestinationById(id);
 	}
