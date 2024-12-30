@@ -75,7 +75,7 @@ public class DestinationDTO {
 	private Boolean isMyLikeDestination;
 
 	// Destination 엔티티를 DestinationDto로 변환하는 메서드
-	public static DestinationDTO toDto(Destination destination, String nickname, List<TagResponseDto> tagDtos,
+	public static DestinationDTO toDTO(Destination destination, String nickname, List<TagResponseDto> tagDtos,
 		Boolean isApiData, Double averageRating, Boolean isMyDestination, Integer reviewCount,
 		Integer wishCount, Integer likeCount, Boolean isMyWishDestination, Boolean isMyLikeDestination) {
 		DestinationDTO dto = new DestinationDTO();
@@ -89,7 +89,7 @@ public class DestinationDTO {
 		dto.setTags(tagDtos);
 		dto.setDisabled(destination.getDisabled());
 		LocationDTO location = new LocationDTO(
-			destination.getLocation().getLocationName(),
+			destination.getLocation().getLocation(),
 			destination.getLocation().getLongitude(),
 			destination.getLocation().getLatitude()
 		);
