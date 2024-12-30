@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.coursemaker.backendv2.common.BaseEntity;
-import net.coursemaker.backendv2.review.command.domain.dto.RequestDestinationDto;
+import net.coursemaker.backendv2.review.command.domain.dto.RequestDestinationDTO;
 
 @Entity
 @Getter
@@ -69,7 +69,7 @@ public class DestinationReview extends BaseEntity {
 	public void removeRecommendation(Long memberId) {
 		this.recommendCount = Math.max(0, this.recommendCount - 1);
 	}
-	public void update(RequestDestinationDto request) {
+	public void update(RequestDestinationDTO request) {
 		this.title = request.getTitle();
 		this.description = request.getDescription();
 		this.rating = request.getRating();

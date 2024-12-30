@@ -9,7 +9,7 @@ import java.util.List;
 import net.coursemaker.backendv2.review.command.domain.aggregate.CourseReview;
 
 @Data
-public class ResponseCourseDto {
+public class ResponseCourseDTO {
 
 	@Schema(description = "리뷰 ID", example = "1")
 	private Long reviewId;
@@ -35,8 +35,8 @@ public class ResponseCourseDto {
 	@Schema(description = "리뷰 작성 날짜", example = "2024-09-14")
 	private String reviewedAt;
 
-	public static ResponseCourseDto fromEntity(CourseReview review) {
-		ResponseCourseDto dto = new ResponseCourseDto();
+	public static ResponseCourseDTO fromEntity(CourseReview review) {
+		ResponseCourseDTO dto = new ResponseCourseDTO();
 		dto.setReviewId(review.getId());
 		dto.setTitle(review.getTitle());
 		dto.setDescription(review.getDescription());

@@ -10,7 +10,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +18,7 @@ import static org.mockito.Mockito.*;
 
 import net.coursemaker.backendv2.review.command.domain.aggregate.DestinationReview;
 import net.coursemaker.backendv2.review.command.domain.aggregate.DestinationReviewRecommendation;
-import net.coursemaker.backendv2.review.command.domain.dto.RequestDestinationDto;
+import net.coursemaker.backendv2.review.command.domain.dto.RequestDestinationDTO;
 import net.coursemaker.backendv2.review.command.domain.exception.ReviewAlreadyRecommendedException;
 import net.coursemaker.backendv2.review.command.domain.exception.ReviewPermissionDeniedException;
 import net.coursemaker.backendv2.review.command.domain.repository.DestinationReviewRepository;
@@ -39,7 +38,7 @@ class DestinationReviewDomainServiceTest {
 
 	@Test
 	void 리뷰_생성_저장_성공() {
-		RequestDestinationDto 요청 = new RequestDestinationDto("멋진 장소", "놀라운 풍경!", 4.5, List.of("사진1", "사진2"));
+		RequestDestinationDTO 요청 = new RequestDestinationDTO("멋진 장소", "놀라운 풍경!", 4.5, List.of("사진1", "사진2"));
 		DestinationReview 리뷰 = new DestinationReview("멋진 장소", "놀라운 풍경!", 1L, 1L, 4.5, List.of("사진1", "사진2"));
 
 		when(destinationReviewRepository.save(any(DestinationReview.class))).thenReturn(리뷰);
@@ -53,7 +52,7 @@ class DestinationReviewDomainServiceTest {
 
 	@Test
 	void 리뷰_수정_성공() {
-		RequestDestinationDto 요청 = new RequestDestinationDto("수정된 제목", "수정된 설명", 4.0, List.of("사진3"));
+		RequestDestinationDTO 요청 = new RequestDestinationDTO("수정된 제목", "수정된 설명", 4.0, List.of("사진3"));
 		DestinationReview 리뷰 = new DestinationReview("멋진 장소", "놀라운 풍경!", 1L, 1L, 4.5, List.of("사진1", "사진2"));
 
 		when(destinationReviewRepository.findById(1L)).thenReturn(Optional.of(리뷰));
@@ -68,7 +67,7 @@ class DestinationReviewDomainServiceTest {
 
 	@Test
 	void 리뷰_수정_권한_없음() {
-		RequestDestinationDto 요청 = new RequestDestinationDto("수정된 제목", "수정된 설명", 4.0, List.of("사진3"));
+		RequestDestinationDTO 요청 = new RequestDestinationDTO("수정된 제목", "수정된 설명", 4.0, List.of("사진3"));
 		DestinationReview 리뷰 = new DestinationReview("멋진 장소", "놀라운 풍경!", 2L, 1L, 4.5, List.of("사진1", "사진2"));
 
 		when(destinationReviewRepository.findById(1L)).thenReturn(Optional.of(리뷰));

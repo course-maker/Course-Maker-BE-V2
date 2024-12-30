@@ -10,7 +10,7 @@ import java.util.Optional;
 
 import net.coursemaker.backendv2.review.command.domain.aggregate.DestinationReview;
 import net.coursemaker.backendv2.review.command.domain.aggregate.DestinationReviewRecommendation;
-import net.coursemaker.backendv2.review.command.domain.dto.RequestDestinationDto;
+import net.coursemaker.backendv2.review.command.domain.dto.RequestDestinationDTO;
 import net.coursemaker.backendv2.review.command.domain.exception.ReviewAlreadyRecommendedException;
 import net.coursemaker.backendv2.review.command.domain.exception.ReviewNotFoundException;
 import net.coursemaker.backendv2.review.command.domain.exception.ReviewPermissionDeniedException;
@@ -23,13 +23,13 @@ public class DestinationReviewDomainService {
 	private final DestinationReviewRepository destinationReviewRepository;
 
 	@Transactional
-	public DestinationReview createReview(RequestDestinationDto request, Long memberId, Long destinationId) {
+	public DestinationReview createReview(RequestDestinationDTO request, Long memberId, Long destinationId) {
 		DestinationReview review = request.toEntity(memberId, destinationId);
 		return destinationReviewRepository.save(review);
 	}
 
 	@Transactional
-	public DestinationReview updateReview(Long reviewId, RequestDestinationDto request, Long memberId) {
+	public DestinationReview updateReview(Long reviewId, RequestDestinationDTO request, Long memberId) {
 		DestinationReview review = findById(reviewId);
 
 		if (!review.getMemberId().equals(memberId)) {

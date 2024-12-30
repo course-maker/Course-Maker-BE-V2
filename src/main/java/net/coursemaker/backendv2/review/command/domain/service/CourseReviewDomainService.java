@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.coursemaker.backendv2.review.command.domain.aggregate.CourseReview;
 import net.coursemaker.backendv2.review.command.domain.aggregate.CourseReviewRecommendation;
-import net.coursemaker.backendv2.review.command.domain.dto.RequestCourseDto;
+import net.coursemaker.backendv2.review.command.domain.dto.RequestCourseDTO;
 import net.coursemaker.backendv2.review.command.domain.exception.ReviewAlreadyRecommendedException;
 import net.coursemaker.backendv2.review.command.domain.exception.ReviewNotFoundException;
 import net.coursemaker.backendv2.review.command.domain.exception.ReviewPermissionDeniedException;
@@ -25,13 +25,13 @@ public class CourseReviewDomainService {
 	private final CourseReviewRepository courseReviewRepository;
 
 	@Transactional
-	public CourseReview createReview(RequestCourseDto request, Long memberId, Long courseId) {
+	public CourseReview createReview(RequestCourseDTO request, Long memberId, Long courseId) {
 		CourseReview review = request.toEntity(memberId, courseId);
 		return courseReviewRepository.save(review);
 	}
 
 	@Transactional
-	public CourseReview updateReview(Long reviewId, RequestCourseDto request, Long memberId) {
+	public CourseReview updateReview(Long reviewId, RequestCourseDTO request, Long memberId) {
 		CourseReview review = findById(reviewId);
 
 		if (!review.getMemberId().equals(memberId)) {

@@ -1,8 +1,8 @@
 package net.coursemaker.backendv2.destination.command.application.service;
 
-import net.coursemaker.backendv2.destination.command.domain.dto.LocationDto;
-import net.coursemaker.backendv2.destination.command.domain.dto.RequestDto;
-import net.coursemaker.backendv2.destination.command.domain.dto.UpdateDto;
+import net.coursemaker.backendv2.destination.command.domain.dto.LocationDTO;
+import net.coursemaker.backendv2.destination.command.domain.dto.RequestDTO;
+import net.coursemaker.backendv2.destination.command.domain.dto.UpdateDTO;
 import net.coursemaker.backendv2.destination.command.domain.exception.DestinationNotFoundException;
 import net.coursemaker.backendv2.destination.command.domain.aggregate.Destination;
 import net.coursemaker.backendv2.destination.command.domain.repository.DestinationRepository;
@@ -40,9 +40,9 @@ class DestinationServiceTest {
 	@DisplayName("정상적으로 여행지 생성")
 	void 여행지_생성_성공() {
 		// Given
-		RequestDto requestDto = new RequestDto();
+		RequestDTO requestDto = new RequestDTO();
 		requestDto.setName("New Destination");
-		requestDto.setLocation(new LocationDto("Seoul", new BigDecimal("127.1234"), new BigDecimal("37.5678")));
+		requestDto.setLocation(new LocationDTO("Seoul", new BigDecimal("127.1234"), new BigDecimal("37.5678")));
 		Destination destination = mock(Destination.class);
 
 		when(destinationRepository.save(any(Destination.class))).thenReturn(destination);
@@ -59,7 +59,7 @@ class DestinationServiceTest {
 	@DisplayName("여행지 생성 실패 - 이름 없음")
 	void 여행지_생성_실패_이름없음() {
 		// Given
-		RequestDto requestDto = new RequestDto();
+		RequestDTO requestDto = new RequestDTO();
 		requestDto.setName(null);
 
 		// When & Then
@@ -72,9 +72,9 @@ class DestinationServiceTest {
 	void 여행지_수정_성공() {
 		// Given
 		Long id = 1L;
-		UpdateDto updateDto = new UpdateDto();
+		UpdateDTO updateDto = new UpdateDTO();
 		updateDto.setName("Updated Destination");
-		updateDto.setLocation(new LocationDto("Busan", new BigDecimal("129.0756"), new BigDecimal("35.1796")));
+		updateDto.setLocation(new LocationDTO("Busan", new BigDecimal("129.0756"), new BigDecimal("35.1796")));
 		Destination existingDestination = mock(Destination.class);
 
 		when(destinationRepository.findById(id)).thenReturn(Optional.of(existingDestination));
@@ -94,7 +94,7 @@ class DestinationServiceTest {
 	void 여행지_수정_실패_ID없음() {
 		// Given
 		Long id = 1L;
-		UpdateDto updateDto = new UpdateDto();
+		UpdateDTO updateDto = new UpdateDTO();
 		updateDto.setName("Updated Destination");
 
 		when(destinationRepository.findById(id)).thenReturn(Optional.empty());

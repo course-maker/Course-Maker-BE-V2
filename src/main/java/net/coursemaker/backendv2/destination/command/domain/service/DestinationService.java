@@ -2,8 +2,8 @@ package net.coursemaker.backendv2.destination.command.domain.service;
 
 import static org.springframework.data.jpa.domain.AbstractPersistable_.*;
 
-import net.coursemaker.backendv2.destination.command.domain.dto.RequestDto;
-import net.coursemaker.backendv2.destination.command.domain.dto.UpdateDto;
+import net.coursemaker.backendv2.destination.command.domain.dto.RequestDTO;
+import net.coursemaker.backendv2.destination.command.domain.dto.UpdateDTO;
 import net.coursemaker.backendv2.destination.command.domain.exception.DestinationNotFoundException;
 import net.coursemaker.backendv2.destination.command.domain.aggregate.Destination;
 
@@ -26,7 +26,7 @@ public class DestinationService {
 	 * @return 저장된 여행지 엔티티
 	 */
 	@Transactional
-	public Destination createDestination(RequestDto request, Long memberId) {
+	public Destination createDestination(RequestDTO request, Long memberId) {
 
 		if (request.getName() == null || request.getName().isBlank()) {
 			throw new DestinationNotFoundException("ID가 " + id + "인 여행지를 찾을 수 없습니다.", "여행지 조회 실패: ID=" + id);
@@ -48,7 +48,7 @@ public class DestinationService {
 	 * @return 수정된 여행지 엔티티
 	 */
 	@Transactional
-	public Destination update(Long id, UpdateDto update, Long memberId) {
+	public Destination update(Long id, UpdateDTO update, Long memberId) {
 		// 도메인 서비스에서 여행지 조회
 		Destination existingDestination = destinationDomainService.findDestinationById(id);
 

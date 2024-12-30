@@ -10,7 +10,7 @@ import java.util.List;
 import net.coursemaker.backendv2.review.command.domain.aggregate.CourseReview;
 
 @Data
-public class RequestCourseDto {
+public class RequestCourseDTO {
 
 	@Schema(description = "리뷰 제목", example = "Amazing Course")
 	@NotNull(message = "리뷰 제목을 입력하세요.")
