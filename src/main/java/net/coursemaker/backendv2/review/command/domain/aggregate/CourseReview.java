@@ -13,9 +13,7 @@ import net.coursemaker.backendv2.common.BaseEntity;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "course_review", uniqueConstraints = {
-	@UniqueConstraint(columnNames = {"member_id", "course_id"})
-})
+@Table(name = "course_review")
 public class CourseReview extends BaseEntity {
 
 	@Id

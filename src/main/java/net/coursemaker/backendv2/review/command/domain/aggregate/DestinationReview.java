@@ -15,9 +15,7 @@ import net.coursemaker.backendv2.review.command.domain.dto.RequestDestinationDTO
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "destination_review", uniqueConstraints = {
-	@UniqueConstraint(columnNames = {"memberId", "destinationId"})
-})
+@Table(name = "destination_review")
 public class DestinationReview extends BaseEntity {
 
 	@Id

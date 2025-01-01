@@ -13,4 +13,6 @@ public interface DestinationReviewRepository extends JpaRepository<DestinationRe
 	Optional<DestinationReviewRecommendation> findRecommendation(Long reviewId, Long memberId);
 
 	Page<DestinationReview> findByMemberId(Long memberId, Pageable pageable);
+
+	boolean existsByMemberIdAndDestinationId(Long memberId, Long destinationId);
 }

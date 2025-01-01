@@ -9,7 +9,9 @@ public enum ReviewErrorCode implements ErrorCode {
 
 	REVIEW_NOT_FOUND("REVIEW-001", "리뷰를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 	REVIEW_PERMISSION_DENIED("REVIEW-002", "리뷰 수정 권한이 없습니다.", HttpStatus.FORBIDDEN),
-	REVIEW_ALREADY_RECOMMENDED("REVIEW-003", "이미 추천한 리뷰입니다.", HttpStatus.BAD_REQUEST);
+	REVIEW_ALREADY_RECOMMENDED("REVIEW-003", "이미 추천한 리뷰입니다.", HttpStatus.BAD_REQUEST),
+	DUPLICATE_REVIEW("REVIEW-004", "이미 리뷰를 작성했습니다.", HttpStatus.BAD_REQUEST),
+	MISSING_REQUIRED_FIELD("REVIEW-005", "필수 입력 항목이 누락되었습니다.", HttpStatus.BAD_REQUEST);
 
 	private final String code; // 오류 코드
 	private final String reasonPhrase; // 왜 발생했는가
