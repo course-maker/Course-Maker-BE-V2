@@ -29,9 +29,11 @@ public class JwtProvider {
 	private final RefreshTokenRepository refreshTokenRepository;
 
 	@Value("${jwt.access.expiration}")
+	@SuppressWarnings("checkstyle:AbbreviationAsWordInName")
 	private Long ACCESS_TOKEN_EXPIRATION;
 
 	@Value("${jwt.refresh.expiration}")
+	@SuppressWarnings("checkstyle:AbbreviationAsWordInName")
 	private Long REFRESH_TOKEN_EXPIRATION;
 
 	public JwtProvider(

@@ -1,8 +1,10 @@
-package net.coursemaker.backendv2.member.command.domain.exception;
+package net.coursemaker.backendv2.member.command.domain.exception.email;
 
 import net.coursemaker.backendv2.common.RootException;
+import net.coursemaker.backendv2.member.command.domain.exception.MemberErrorCode;
 
 import lombok.Getter;
+
 
 @Getter
 public class VerificationCodeMisMatchException extends RootException {

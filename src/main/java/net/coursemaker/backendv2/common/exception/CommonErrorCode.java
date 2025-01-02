@@ -9,7 +9,8 @@ import lombok.Getter;
 @Getter
 public enum CommonErrorCode implements ErrorCode {
 
-	DATA_FORMAT_MISMATCH("COMMON-001", "data format mismatch", HttpStatus.BAD_REQUEST);
+	DATA_FORMAT_MISMATCH("COMMON-001", "data format mismatch", HttpStatus.BAD_REQUEST),
+	LOGIN_REQUIRED("COMMON-002", "login required", HttpStatus.UNAUTHORIZED);
 
 	private final String code; // 오류 코드
 	private final String reasonPhrase; // 왜 발생했는가
