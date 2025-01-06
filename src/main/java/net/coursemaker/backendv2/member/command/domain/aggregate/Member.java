@@ -79,6 +79,10 @@ public class Member extends BaseEntity {
 		this.name = name;
 	}
 
+	public void makeBlock() {
+		this.isBlocked = true;
+	}
+
 	public Member(
 		String email,
 		String password,

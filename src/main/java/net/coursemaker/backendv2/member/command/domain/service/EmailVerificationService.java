@@ -6,9 +6,9 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import net.coursemaker.backendv2.member.command.domain.aggregate.EmailVerificationCode;
-import net.coursemaker.backendv2.member.command.domain.exception.VerificationCodeExpiredException;
-import net.coursemaker.backendv2.member.command.domain.exception.VerificationCodeMisMatchException;
-import net.coursemaker.backendv2.member.command.domain.exception.VerificationCodeNotSendException;
+import net.coursemaker.backendv2.member.command.domain.exception.email.VerificationCodeExpiredException;
+import net.coursemaker.backendv2.member.command.domain.exception.email.VerificationCodeMisMatchException;
+import net.coursemaker.backendv2.member.command.domain.exception.email.VerificationCodeNotSendException;
 import net.coursemaker.backendv2.member.command.domain.repository.EmailVerificationRepository;
 import net.coursemaker.backendv2.util.EmailSender;
 

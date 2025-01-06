@@ -16,7 +16,8 @@ public enum MemberErrorCode implements ErrorCode {
 	PASSWORD_NOT_CORRECT("USER-005", "password not correct", HttpStatus.BAD_REQUEST),
 	EMAIL_VERIFICATION_NOT_SEND("USER-006", "verification code not send", HttpStatus.BAD_REQUEST),
 	EMAIL_VERIFICATION_EXPIRED("USER-007", "verification code expired", HttpStatus.BAD_REQUEST),
-	EMAIL_VERIFICATION_MISMATCH("USER-008", "verification code mismatch", HttpStatus.BAD_REQUEST);
+	EMAIL_VERIFICATION_MISMATCH("USER-008", "verification code mismatch", HttpStatus.BAD_REQUEST),
+	BANNED_MEMBER("USER-009", "banned member", HttpStatus.BAD_REQUEST),;
 
 	private final String code; // 오류 코드
 	private final String reasonPhrase; // 왜 발생했는가
