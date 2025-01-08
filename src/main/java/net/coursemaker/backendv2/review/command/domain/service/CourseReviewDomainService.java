@@ -30,16 +30,7 @@ public class CourseReviewDomainService {
 	@Transactional
 	public CourseReview createReview(RequestCourseDTO request, Long memberId, Long courseId) {
 		validateRequest(request);
-		validateMemberId(memberId);
-		validateCourseId(courseId);
-
-		boolean exists = courseReviewRepository.existsByMemberIdAndCourseId(memberId, courseId);
-		if (exists) {
-			throw new DuplicateReviewException(
-				ReviewErrorCode.DUPLICATE_REVIEW.getReasonPhrase(),
-				"중복 리뷰 감지: 회원 ID " + memberId + ", 코스 ID " + courseId
-			);
-		}
+		validateDuplicateReviewIsExist(memberId, courseId);
 
 		CourseReview review = request.toEntity(memberId, courseId);
 		return courseReviewRepository.save(review);
@@ -84,11 +75,7 @@ public class CourseReviewDomainService {
 		validateReviewId(reviewId);
 
 		CourseReview review = findById(reviewId);
-
-		Optional<CourseReviewRecommendation> existingRecommendation = courseReviewRepository.findRecommendation(reviewId, memberId);
-		if (existingRecommendation.isPresent()) {
-			throw new ReviewAlreadyRecommendedException("이미 추천한 리뷰입니다.", "리뷰 ID: " + reviewId + ", 회원 ID: " + memberId);
-		}
+		validateReviewRecommendationIsExist(reviewId, memberId);
 
 		review.addRecommendation(memberId);
 		courseReviewRepository.save(review);
@@ -110,36 +97,59 @@ public class CourseReviewDomainService {
 	}
 
 	// 유효성 검증 메서드
+
+	private void validateDuplicateReviewIsExist(Long memberId, Long courseId) {
+		validateMemberId(memberId);
+		validateCourseId(courseId);
+
+		boolean exists = courseReviewRepository.existsByMemberIdAndCourseId(memberId, courseId);
+		if (exists) {
+			throw new DuplicateReviewException(
+				ReviewErrorCode.DUPLICATE_REVIEW.getReasonPhrase(),
+				"중복 리뷰 감지: 회원 ID " + memberId + ", 코스 ID " + courseId
+			);
+		}
+	}
+
+	private void validateReviewRecommendationIsExist(Long reviewId, Long memberId) {
+		Optional<CourseReviewRecommendation> existingRecommendation = courseReviewRepository.findRecommendation(reviewId, memberId);
+		if (existingRecommendation.isPresent()) {
+			throw new ReviewAlreadyRecommendedException(
+				"이미 추천한 리뷰입니다.",
+				"리뷰 ID: " + reviewId + ", 회원 ID: " + memberId
+			);
+		}
+	}
 	private void validateRequest(RequestCourseDTO request) {
 		if (request == null) {
-			throw new MissingRequiredFieldException("request");
+			throw new MissingRequiredFieldException("요청 데이터가 없습니다.", "Request 데이터 검증 실패");
 		}
 		if (request.getTitle() == null || request.getTitle().trim().isEmpty()) {
-			throw new MissingRequiredFieldException("title");
+			throw new MissingRequiredFieldException("제목이 비어 있습니다.", "Title 검증 실패");
 		}
 		if (request.getDescription() == null || request.getDescription().trim().isEmpty()) {
-			throw new MissingRequiredFieldException("description");
+			throw new MissingRequiredFieldException("설명이 비어 있습니다.", "Description 검증 실패");
 		}
 		if (request.getRating() == null || request.getRating() < 0 || request.getRating() > 5) {
-			throw new MissingRequiredFieldException("rating");
+			throw new MissingRequiredFieldException("평점이 잘못되었습니다.", "Rating 검증 실패");
 		}
 	}
 
 	private void validateMemberId(Long memberId) {
 		if (memberId == null || memberId <= 0) {
-			throw new MissingRequiredFieldException("memberId");
+			throw new MissingRequiredFieldException("회원 ID가 유효하지 않습니다.", "memberId가 null이거나 0보다 작습니다.");
 		}
 	}
 
 	private void validateCourseId(Long courseId) {
 		if (courseId == null || courseId <= 0) {
-			throw new MissingRequiredFieldException("courseId");
+			throw new MissingRequiredFieldException("코스 ID가 유효하지 않습니다.", "courseId가 null이거나 0보다 작습니다.");
 		}
 	}
 
 	private void validateReviewId(Long reviewId) {
 		if (reviewId == null || reviewId <= 0) {
-			throw new MissingRequiredFieldException("reviewId");
+			throw new MissingRequiredFieldException("리뷰 ID가 유효하지 않습니다.", "ReviewId 검증 실패");
 		}
 	}
 
