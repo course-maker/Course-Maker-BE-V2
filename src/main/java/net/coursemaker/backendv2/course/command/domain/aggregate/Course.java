@@ -11,12 +11,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Course {
 
 	@Id
@@ -39,10 +41,6 @@ public class Course {
 	@Column(name = "travelerCount")
 	private int recommendedTravelerRange; // 여행추천인원
 
-	@Column(name = "travelType")
-	@ColumnDefault("0")
-	private Integer travelType;
-
 	@Column(name = "pictureLink", length = 300)
 	private String pictureLink;
 
@@ -54,12 +52,27 @@ public class Course {
 	private Double averageRating;
 
 	@Column(name = "wishCount")
-	private Integer wishCount;
+	private Integer wishCount; //찜
 
 	@Column(name = "reviewCount")
-	private Integer reviewCount;
+	private Integer reviewCount; // 댓글수
 
 	@Column(name = "likeCount")
-	private Integer likeCount;
+	private Integer likeCount; //좋아요
 
+	@Builder
+	public Course(String title, String contents, int duration, int recommendedTravelerRange, String pictureLink, Member author, Double averageRating,
+		Integer wishCount, Integer likeCount, Integer reviewCount) {
+		this.title = title;
+		this.contents = contents;
+		this.views = 0;
+		this.duration = duration;
+		this.recommendedTravelerRange = recommendedTravelerRange;
+		this.pictureLink = pictureLink;
+		this.author = author;
+		this.averageRating = averageRating;
+		this.wishCount = wishCount;
+		this.likeCount = likeCount;
+		this.reviewCount = reviewCount;
+	}
 }

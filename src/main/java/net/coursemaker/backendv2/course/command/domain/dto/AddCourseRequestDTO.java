@@ -13,7 +13,7 @@ import lombok.Data;
 
 @Schema(description = "코스 추가 DTO")
 @Data
-public class AddTravelCourseRequest {
+public class AddCourseRequestDTO {
 
 	@Schema(description = "코스 타이틀", example = "Course Title1")
 	@NotBlank(message = "코스 타이틀을 입력해야 합니다.")
@@ -32,12 +32,7 @@ public class AddTravelCourseRequest {
 	@Schema(description = "여행 인원", example = "5")
 	@NotNull(message = "여행 인원은 1명 이상이어야 합니다.")
 	@Min(value = 1, message = "여행 인원은 1명 이상이어야 합니다.")
-	private Integer travelerCount;
-
-	@Schema(description = "여행 타입, 0이면 자동차, 1이면 대중교통에 해당합니다.", example = "0")
-	@NotNull(message = "여행 타입을 선택하셔야 합니다.")
-	@Min(value = 0, message = "여행 타입을 선택하셔야 합니다.")
-	private Integer travelType;
+	private Integer recommendedTravelerRange;
 
 	@Schema(description = "코스 대표 이미지 주소", example = "http://example.com/course1.jpg")
 	@NotBlank(message = "이미지 링크를 넣어야 합니다.")
@@ -50,7 +45,6 @@ public class AddTravelCourseRequest {
 
 	@Schema(description = "유저 닉네임", example = "nickname1", hidden = true)
 	private String nickname;
-
 
 	@Schema(description = "평균 평점", example = "4.5", hidden = true)
 	private Double averageRating;
