@@ -10,7 +10,7 @@ import java.util.List;
 import net.coursemaker.backendv2.review.command.domain.aggregate.DestinationReview;
 
 @Data
-public class RequestDestinationDto {
+public class RequestDestinationDTO {
 
 	@Schema(description = "리뷰 제목", example = "Great Place")
 	@NotNull(message = "Title is required")
@@ -39,7 +39,7 @@ public class RequestDestinationDto {
 			this.pictures != null ? this.pictures : List.of()
 		);
 	}
-	public RequestDestinationDto(String title, String description, Double rating, List<String> pictures) {
+	public RequestDestinationDTO(String title, String description, Double rating, List<String> pictures) {
 		this.title = title;
 		this.description = description;
 		this.rating = rating;

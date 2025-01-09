@@ -1,110 +1,118 @@
 package net.coursemaker.backendv2.review.command.domain.service;
 
+
+import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
-import net.coursemaker.backendv2.review.command.domain.aggregate.DestinationReview;
-import net.coursemaker.backendv2.review.command.domain.aggregate.DestinationReviewRecommendation;
-import net.coursemaker.backendv2.review.command.domain.dto.RequestDestinationDTO;
+import net.coursemaker.backendv2.review.command.domain.aggregate.CourseReview;
+import net.coursemaker.backendv2.review.command.domain.aggregate.CourseReviewRecommendation;
+import net.coursemaker.backendv2.review.command.domain.dto.RequestCourseDTO;
 import net.coursemaker.backendv2.review.command.domain.exception.DuplicateReviewException;
 import net.coursemaker.backendv2.review.command.domain.exception.MissingRequiredFieldException;
 import net.coursemaker.backendv2.review.command.domain.exception.ReviewAlreadyRecommendedException;
 import net.coursemaker.backendv2.review.command.domain.exception.ReviewErrorCode;
 import net.coursemaker.backendv2.review.command.domain.exception.ReviewNotFoundException;
 import net.coursemaker.backendv2.review.command.domain.exception.ReviewPermissionDeniedException;
-import net.coursemaker.backendv2.review.command.domain.repository.DestinationReviewRepository;
+import net.coursemaker.backendv2.review.command.domain.repository.CourseReviewRepository;
 
 @Service
 @RequiredArgsConstructor
-public class DestinationReviewDomainService {
+public class CourseReviewDomainService {
 
-	private final DestinationReviewRepository destinationReviewRepository;
+	private final CourseReviewRepository courseReviewRepository;
 
 	@Transactional
-	public DestinationReview createReview(RequestDestinationDTO request, Long memberId, Long destinationId) {
+	public CourseReview createReview(RequestCourseDTO request, Long memberId, Long courseId) {
 		validateRequest(request);
-		validateDuplicateReviewIsExist(memberId, destinationId);
+		validateDuplicateReviewIsExist(memberId, courseId);
 
-		DestinationReview review = request.toEntity(memberId, destinationId);
-		return destinationReviewRepository.save(review);
+		CourseReview review = request.toEntity(memberId, courseId);
+		return courseReviewRepository.save(review);
 	}
 
 	@Transactional
-	public DestinationReview updateReview(Long reviewId, RequestDestinationDTO request, Long memberId) {
+	public CourseReview updateReview(Long reviewId, RequestCourseDTO request, Long memberId) {
 		validateRequest(request);
-		validateEntityExistence(reviewId, memberId);
+		validateMemberId(memberId);
+		validateReviewId(reviewId);
 
-		DestinationReview review = findById(reviewId);
+		CourseReview review = findById(reviewId);
+
 		validateReviewOwnership(review, memberId);
 
-		review.update(request);
-		return destinationReviewRepository.save(review);
+		review.update(request.getTitle(), request.getDescription(), request.getRating(), request.getPictures());
+		return courseReviewRepository.save(review);
 	}
-
 
 	@Transactional
 	public void deleteReview(Long reviewId, Long memberId) {
-		validateEntityExistence(reviewId, memberId);
+		validateMemberId(memberId);
+		validateReviewId(reviewId);
 
-		DestinationReview review = findById(reviewId);
+		CourseReview review = findById(reviewId);
+
 		validateReviewOwnership(review, memberId);
 
 		review.markAsDeleted();
-		destinationReviewRepository.save(review);
+		courseReviewRepository.save(review);
 	}
 
-	public DestinationReview findById(Long reviewId) {
+	public CourseReview findById(Long reviewId) {
 		validateReviewId(reviewId);
 
-		return destinationReviewRepository.findById(reviewId)
+		return courseReviewRepository.findById(reviewId)
 			.orElseThrow(() -> new ReviewNotFoundException("리뷰를 찾을 수 없습니다.", "리뷰 ID: " + reviewId));
 	}
 
 	public void addRecommendation(Long reviewId, Long memberId) {
-		validateEntityExistence(reviewId, memberId);
+		validateMemberId(memberId);
+		validateReviewId(reviewId);
+
+		CourseReview review = findById(reviewId);
 		validateReviewRecommendationIsExist(reviewId, memberId);
 
-		DestinationReview review = findById(reviewId);
 		review.addRecommendation(memberId);
-		destinationReviewRepository.save(review);
+		courseReviewRepository.save(review);
 	}
 
 	public void removeRecommendation(Long reviewId, Long memberId) {
-		validateEntityExistence(reviewId, memberId);
+		validateMemberId(memberId);
+		validateReviewId(reviewId);
 
-		DestinationReview review = findById(reviewId);
+		CourseReview review = findById(reviewId);
 		review.removeRecommendation(memberId);
-		destinationReviewRepository.save(review);
+		courseReviewRepository.save(review);
 	}
 
-	public Page<DestinationReview> findReviewsByMember(Long memberId, Pageable pageable) {
-		validateMemberId(memberId, "회원 ID가 유효하지 않습니다.", "MemberId 검증 실패");
+	public Page<CourseReview> findReviewsByMember(Long memberId, Pageable pageable) {
+		validateMemberId(memberId);
 
-		return destinationReviewRepository.findByMemberId(memberId, pageable);
+		return courseReviewRepository.findByMemberId(memberId, pageable);
 	}
 
-	// 검증 메서드
+	// 유효성 검증 메서드
 
-	private void validateDuplicateReviewIsExist(Long memberId, Long destinationId) {
-		validateMemberId(memberId, "회원 ID가 유효하지 않습니다.", "MemberId 검증 실패");
-		validateDestinationId(destinationId, "목적지 ID가 유효하지 않습니다.", "DestinationId 검증 실패");
+	private void validateDuplicateReviewIsExist(Long memberId, Long courseId) {
+		validateMemberId(memberId);
+		validateCourseId(courseId);
 
-		boolean exists = destinationReviewRepository.existsByMemberIdAndDestinationId(memberId, destinationId);
+		boolean exists = courseReviewRepository.existsByMemberIdAndCourseId(memberId, courseId);
 		if (exists) {
 			throw new DuplicateReviewException(
 				ReviewErrorCode.DUPLICATE_REVIEW.getReasonPhrase(),
-				"중복 리뷰 감지: 회원 ID " + memberId + ", 목적지 ID " + destinationId
+				"중복 리뷰 감지: 회원 ID " + memberId + ", 코스 ID " + courseId
 			);
 		}
 	}
 
 	private void validateReviewRecommendationIsExist(Long reviewId, Long memberId) {
-		Optional<DestinationReviewRecommendation> existingRecommendation = destinationReviewRepository.findRecommendation(reviewId, memberId);
+		Optional<CourseReviewRecommendation> existingRecommendation = courseReviewRepository.findRecommendation(reviewId, memberId);
 		if (existingRecommendation.isPresent()) {
 			throw new ReviewAlreadyRecommendedException(
 				"이미 추천한 리뷰입니다.",
@@ -112,8 +120,7 @@ public class DestinationReviewDomainService {
 			);
 		}
 	}
-
-	private void validateRequest(RequestDestinationDTO request) {
+	private void validateRequest(RequestCourseDTO request) {
 		if (request == null) {
 			throw new MissingRequiredFieldException("요청 데이터가 없습니다.", "Request 데이터 검증 실패");
 		}
@@ -128,15 +135,15 @@ public class DestinationReviewDomainService {
 		}
 	}
 
-	private void validateMemberId(Long memberId, String clientMessage, String logMessage) {
+	private void validateMemberId(Long memberId) {
 		if (memberId == null || memberId <= 0) {
-			throw new MissingRequiredFieldException(clientMessage, logMessage);
+			throw new MissingRequiredFieldException("회원 ID가 유효하지 않습니다.", "memberId가 null이거나 0보다 작습니다.");
 		}
 	}
 
-	private void validateDestinationId(Long destinationId, String clientMessage, String logMessage) {
-		if (destinationId == null || destinationId <= 0) {
-			throw new MissingRequiredFieldException(clientMessage, logMessage);
+	private void validateCourseId(Long courseId) {
+		if (courseId == null || courseId <= 0) {
+			throw new MissingRequiredFieldException("코스 ID가 유효하지 않습니다.", "courseId가 null이거나 0보다 작습니다.");
 		}
 	}
 
@@ -146,7 +153,7 @@ public class DestinationReviewDomainService {
 		}
 	}
 
-	private void validateReviewOwnership(DestinationReview review, Long memberId) {
+	private void validateReviewOwnership(CourseReview review, Long memberId) {
 		if (!review.getMemberId().equals(memberId)) {
 			throw new ReviewPermissionDeniedException(
 				ReviewErrorCode.REVIEW_PERMISSION_DENIED.getReasonPhrase(),
@@ -154,9 +161,5 @@ public class DestinationReviewDomainService {
 			);
 		}
 	}
-
-	private void validateEntityExistence(Long reviewId, Long memberId) {
-		validateReviewId(reviewId);
-		validateMemberId(memberId, "회원 ID가 유효하지 않습니다.", "MemberId 검증 실패");
-	}
 }
+

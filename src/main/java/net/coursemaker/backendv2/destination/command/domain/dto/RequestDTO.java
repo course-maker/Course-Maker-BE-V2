@@ -13,7 +13,7 @@ import net.coursemaker.backendv2.destination.command.domain.aggregate.Destinatio
 import net.coursemaker.backendv2.destination.command.domain.aggregate.Location;
 
 @Data
-public class RequestDto {
+public class RequestDTO {
 	@Schema(description = "유저 ID", example = "1", hidden = true)
 	private Long memberId; // 유저 ID
 
@@ -30,7 +30,7 @@ public class RequestDto {
 	@Schema(description = "위치 정보")
 	@NotNull(message = "위치 정보는 비어 있을 수 없습니다.")
 	@Valid
-	private LocationDto location; // 위치 정보
+	private LocationDTO location; // 위치 정보
 
 	@Schema(description = "대표 사진", defaultValue = "http://example.com/coursemaker.jpg")
 	@NotNull(message = "대표 사진 링크를 입력하세요.")

@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LocationDto {
+public class LocationDTO {
 	@Schema(description = "도로명 주소", example = "부산광역시 해운대구 우동")
 	@NotNull(message = "도로명 주소를 입력하세요.")
 	@NotEmpty(message = "도로명 주소는 비어 있을 수 없습니다.")

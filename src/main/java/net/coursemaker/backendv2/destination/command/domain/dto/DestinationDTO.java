@@ -12,7 +12,7 @@ import java.util.List;
 import net.coursemaker.backendv2.destination.command.domain.aggregate.Destination;
 
 @Data
-public class DestinationDto {
+public class DestinationDTO {
 	@Schema(description = "여행지 Id", example = "1")
 	@NotNull(message = "여행지 ID를 입력해주세요.")
 	private Long id;
@@ -36,7 +36,7 @@ public class DestinationDto {
 	@Schema(description = "위치 정보")
 	@NotNull(message = "위치 정보는 비어 있을 수 없습니다.")
 	@Valid
-	private LocationDto location; // 위치
+	private LocationDTO location; // 위치
 
 	@Schema(description = "대표 사진", defaultValue = "http://example.com/coursemaker.jpg")
 	private String pictureLink; // 대표 사진
@@ -75,10 +75,10 @@ public class DestinationDto {
 	private Boolean isMyLikeDestination;
 
 	// Destination 엔티티를 DestinationDto로 변환하는 메서드
-	public static DestinationDto toDto(Destination destination, String nickname, List<TagResponseDto> tagDtos,
+	public static DestinationDTO toDTO(Destination destination, String nickname, List<TagResponseDto> tagDtos,
 		Boolean isApiData, Double averageRating, Boolean isMyDestination, Integer reviewCount,
 		Integer wishCount, Integer likeCount, Boolean isMyWishDestination, Boolean isMyLikeDestination) {
-		DestinationDto dto = new DestinationDto();
+		DestinationDTO dto = new DestinationDTO();
 		dto.setId(destination.getId());
 		dto.setNickname(nickname); // 유저 닉네임 설정
 		dto.setName(destination.getName());
@@ -88,8 +88,8 @@ public class DestinationDto {
 		dto.setApiContent(destination.getApiContent());
 		dto.setTags(tagDtos);
 		dto.setDisabled(destination.getDisabled());
-		LocationDto location = new LocationDto(
-			destination.getLocation().getLocationName(),
+		LocationDTO location = new LocationDTO(
+			destination.getLocation().getLocation(),
 			destination.getLocation().getLongitude(),
 			destination.getLocation().getLatitude()
 		);

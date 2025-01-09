@@ -7,7 +7,7 @@ import java.util.List;
 import net.coursemaker.backendv2.review.command.domain.aggregate.DestinationReview;
 
 @Data
-public class ResponseDestinationDto {
+public class ResponseDestinationDTO {
 
 	private Long reviewId;
 	private String title;
@@ -16,8 +16,8 @@ public class ResponseDestinationDto {
 	private List<String> pictures;
 	private Long memberId;
 
-	public static ResponseDestinationDto fromEntity(DestinationReview review) {
-		ResponseDestinationDto dto = new ResponseDestinationDto();
+	public static ResponseDestinationDTO fromEntity(DestinationReview review) {
+		ResponseDestinationDTO dto = new ResponseDestinationDTO();
 		dto.setReviewId(review.getId());
 		dto.setTitle(review.getTitle());
 		dto.setDescription(review.getDescription());
