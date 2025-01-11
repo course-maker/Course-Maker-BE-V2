@@ -1,4 +1,4 @@
-package net.coursemaker.backendv2.common.exception;
+package net.coursemaker.backendv2.common.exception.type;
 
 import org.springframework.http.HttpStatus;
 

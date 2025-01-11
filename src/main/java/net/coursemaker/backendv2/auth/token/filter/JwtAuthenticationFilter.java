@@ -10,7 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import net.coursemaker.backendv2.auth.command.dto.LoginedInfo;
+import net.coursemaker.backendv2.auth.command.domain.dto.LoginedInfo;
 import net.coursemaker.backendv2.auth.token.JwtProvider;
 import net.coursemaker.backendv2.auth.token.TokenType;
 import net.coursemaker.backendv2.auth.token.exception.ExpiredJwtTokenException;

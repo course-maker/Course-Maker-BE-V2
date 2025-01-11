@@ -1,19 +1,17 @@
 package net.coursemaker.backendv2.auth.command.domain.service;
 
-import net.coursemaker.backendv2.auth.command.dto.EmailLoginRequestDTO;
-import net.coursemaker.backendv2.auth.command.dto.LoginResult;
-import net.coursemaker.backendv2.auth.command.dto.LoginState;
+import net.coursemaker.backendv2.auth.command.domain.dto.EmailLoginRequestDTO;
+import net.coursemaker.backendv2.auth.command.domain.dto.LoginResult;
+import net.coursemaker.backendv2.auth.command.domain.type.LoginState;
 import net.coursemaker.backendv2.auth.token.JwtProvider;
 import net.coursemaker.backendv2.member.command.domain.aggregate.Member;
 import net.coursemaker.backendv2.member.command.domain.aggregate.Role;
-import net.coursemaker.backendv2.member.command.domain.dto.MemberEntity;
 import net.coursemaker.backendv2.member.command.domain.exception.BannedMemberException;
 import net.coursemaker.backendv2.member.command.domain.exception.MemberNotFoundException;
 import net.coursemaker.backendv2.member.command.domain.exception.PasswordNotCorrectException;
 import net.coursemaker.backendv2.member.command.domain.repository.MemberCommandRepository;
 import net.coursemaker.backendv2.member.command.domain.service.MemberUtils;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,7 +19,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -70,9 +67,10 @@ class EmailLoginServiceTest {
 
 		member.updateRole(Role.ROLE_BEGINNER_TRAVELER);
 
-		EmailLoginRequestDTO request = new EmailLoginRequestDTO();
-		request.setEmail(email);
-		request.setPassword(password);
+		EmailLoginRequestDTO request = EmailLoginRequestDTO.builder()
+			.email(email)
+			.password(password)
+			.build();
 
 		when(memberCommandRepository.findAllByEmail(email))
 			.thenReturn(List.of(member));
@@ -108,9 +106,10 @@ class EmailLoginServiceTest {
 			true
 		);
 
-		EmailLoginRequestDTO request = new EmailLoginRequestDTO();
-		request.setEmail(email);
-		request.setPassword(password);
+		EmailLoginRequestDTO request = EmailLoginRequestDTO.builder()
+			.email(email)
+			.password(password)
+			.build();
 
 		when(memberCommandRepository.findAllByEmail(email))
 			.thenReturn(List.of(member));
@@ -137,9 +136,10 @@ class EmailLoginServiceTest {
 
 		member.makeBlock();
 
-		EmailLoginRequestDTO request = new EmailLoginRequestDTO();
-		request.setEmail(email);
-		request.setPassword("password");
+		EmailLoginRequestDTO request = EmailLoginRequestDTO.builder()
+			.email(email)
+			.password("password")
+			.build();
 
 		when(memberCommandRepository.findAllByEmail(email))
 			.thenReturn(List.of(member));
@@ -153,9 +153,10 @@ class EmailLoginServiceTest {
 	void login_WhenMemberNotFound_ThrowsException() {
 		// Given
 		String email = "nonexistent@test.com";
-		EmailLoginRequestDTO request = new EmailLoginRequestDTO();
-		request.setEmail(email);
-		request.setPassword("password");
+		EmailLoginRequestDTO request = EmailLoginRequestDTO.builder()
+			.email(email)
+			.password("password")
+			.build();
 
 		when(memberCommandRepository.findAllByEmail(email))
 			.thenReturn(Collections.emptyList());

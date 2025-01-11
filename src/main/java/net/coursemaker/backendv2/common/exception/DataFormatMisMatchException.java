@@ -1,6 +1,7 @@
 package net.coursemaker.backendv2.common.exception;
 
 import net.coursemaker.backendv2.common.RootException;
+import net.coursemaker.backendv2.common.exception.type.CommonErrorCode;
 
 import lombok.Getter;
 
