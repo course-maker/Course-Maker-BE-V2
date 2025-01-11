@@ -60,8 +60,9 @@ public class Course extends BaseEntity {
 	private Integer likeCount; //좋아요
 
 	@Builder
-	public Course(String title, String contents, int duration, int recommendedTravelerRange, String pictureLink, Member author, Double averageRating,
+	public Course(Long id, String title, String contents, int duration, int recommendedTravelerRange, String pictureLink, Member author, Double averageRating,
 		Integer wishCount, Integer likeCount, Integer reviewCount) {
+		this.id = id;
 		this.title = title;
 		this.contents = contents;
 		this.views = 0;

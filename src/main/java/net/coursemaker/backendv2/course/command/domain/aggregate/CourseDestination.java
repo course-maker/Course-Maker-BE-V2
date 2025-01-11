@@ -38,7 +38,8 @@ public class CourseDestination {
 	private Destination destination;
 
 	@Builder
-	public CourseDestination(Course travelCourse, Destination destination, short date, short visitOrder) {
+	public CourseDestination(Long id, Course travelCourse, Destination destination, short date, short visitOrder) {
+		this.id = id;
 		this.travelCourse = travelCourse;
 		this.destination = destination;
 		this.date = date;
