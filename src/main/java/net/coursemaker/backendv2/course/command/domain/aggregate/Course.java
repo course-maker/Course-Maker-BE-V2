@@ -1,7 +1,6 @@
 package net.coursemaker.backendv2.course.command.domain.aggregate;
 
-import org.hibernate.annotations.ColumnDefault;
-
+import net.coursemaker.backendv2.common.BaseEntity;
 import net.coursemaker.backendv2.member.command.domain.aggregate.Member;
 
 import jakarta.persistence.Column;
@@ -19,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Course {
+public class Course extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -74,5 +73,33 @@ public class Course {
 		this.wishCount = wishCount;
 		this.likeCount = likeCount;
 		this.reviewCount = reviewCount;
+	}
+
+	// 변경 메서드
+	public void updateTitle(String title) {
+		if (title.length() > 50) {
+			throw new IllegalArgumentException("코스 제목은 50자를 넘길 수 없습니다.");
+		}
+		this.title = title;
+	}
+
+	public void updateContents(String contents) {
+		this.contents = contents;
+	}
+
+	public void updateDuration(int duration) {
+		this.duration = duration;
+	}
+
+	public void updateRecommendedTravelerRange(int range) {
+		this.recommendedTravelerRange = range;
+	}
+
+	public void updatePictureLink(String pictureLink) {
+		this.pictureLink = pictureLink;
+	}
+
+	public void incrementViews() {
+		this.views++;
 	}
 }

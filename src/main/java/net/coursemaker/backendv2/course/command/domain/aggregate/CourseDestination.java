@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -35,6 +36,14 @@ public class CourseDestination {
 	@ManyToOne
 	@JoinColumn(name = "destinationId")
 	private Destination destination;
+
+	@Builder
+	public CourseDestination(Course travelCourse, Destination destination, short date, short visitOrder) {
+		this.travelCourse = travelCourse;
+		this.destination = destination;
+		this.date = date;
+		this.visitOrder = visitOrder;
+	}
 
 
 }
