@@ -3,9 +3,9 @@ package net.coursemaker.backendv2.auth.command.domain.service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import net.coursemaker.backendv2.auth.command.dto.EmailLoginRequestDTO;
-import net.coursemaker.backendv2.auth.command.dto.LoginResult;
-import net.coursemaker.backendv2.auth.command.dto.LoginState;
+import net.coursemaker.backendv2.auth.command.domain.dto.EmailLoginRequestDTO;
+import net.coursemaker.backendv2.auth.command.domain.dto.LoginResult;
+import net.coursemaker.backendv2.auth.command.domain.type.LoginState;
 import net.coursemaker.backendv2.auth.token.JwtProvider;
 import net.coursemaker.backendv2.member.command.domain.aggregate.Role;
 import net.coursemaker.backendv2.member.command.domain.dto.MemberEntity;

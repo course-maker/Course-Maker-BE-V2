@@ -1,6 +1,6 @@
-package net.coursemaker.backendv2.auth.command.dto;
+package net.coursemaker.backendv2.auth.command.domain.dto;
 
-import net.coursemaker.backendv2.common.exception.LoginRequiredException;
+import net.coursemaker.backendv2.auth.command.domain.exception.LoginRequiredException;
 import net.coursemaker.backendv2.member.command.domain.aggregate.Role;
 
 public class LoginedInfo {

@@ -1,4 +1,4 @@
-package net.coursemaker.backendv2.auth.command.dto;
+package net.coursemaker.backendv2.auth.command.domain.type;
 
 
 public enum LoginState {

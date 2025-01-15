@@ -15,13 +15,13 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 
 @Configuration
-@Profile("dev")
-public class SwaggerConfigDev {
+@Profile("local")
+public class SwaggerConfigLocal {
 
 	@Bean
 	public OpenAPI api() {
 		Server server = new Server();
-		server.setUrl("https://api.dev.course-maker.net:9191");
+		server.setUrl("http://localhost:8080");
 		server.setDescription("코스메이커 요청 서버");
 
 		SecurityScheme apiKey = new SecurityScheme()
@@ -49,7 +49,7 @@ public class SwaggerConfigDev {
 
 
 		return new Info()
-			.title("[DEV] Course Maker Develop API")
+			.title("[LOCAL] Course Maker Develop API")
 			.description("코스메이커 개발서버 API 스웨거 입니다.")
 			.version("0.1.0")
 			.contact(contact);
